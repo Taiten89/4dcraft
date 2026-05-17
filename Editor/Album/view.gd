@@ -6,8 +6,8 @@ extends TextureRect
 
 func _draw () -> void:
 	var album := album_edit.album
-	var bg_i := editor.background_intensity
-	var bg_c := Color(bg_i, bg_i, bg_i)
+	var bg_v := editor.background_color
+	var bg_c := Color(bg_v.x, bg_v.y, bg_v.z)
 
 	var cr: ColorRect = get_parent()
 	cr.color = bg_c

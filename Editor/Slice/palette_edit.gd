@@ -5,6 +5,8 @@ var rgba_inputs: Array[SpinBox]
 var palette: Palette
 var selected_i := 0
 
+@onready var editor: Editor = $/root/Editor
+
 
 func _ready() -> void:
 	rgba_inputs = \
@@ -12,6 +14,10 @@ func _ready() -> void:
 		 $Input_Box/G_Input,
 		 $Input_Box/B_Input,
 		 $Input_Box/A_Input]
+
+
+func _process (_delta: float) -> void:
+	$Gradient.material.set_shader_parameter(&"bg_c", editor.background_color)
 
 
 func update (new_palette: Palette) -> void:

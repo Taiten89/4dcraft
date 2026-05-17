@@ -8,6 +8,9 @@ var workgroup_h: SpinBox
 var portrait: CheckBox
 var portrait_toggled := false
 var portrait_n: SpinBox
+var bg_c_a: Vector3
+var bg_c_b: Vector3
+var bg_t: float
 
 
 func _ready () -> void:
@@ -31,6 +34,15 @@ func push_to_view () -> void:
 	vparams.subsampling_step = 0
 	vparams.workgroup_w = int(workgroup_w.value)
 	vparams.workgroup_h = int(workgroup_h.value)
+
+	bg_c_a.x = $Column2/BG_C/C/AR.value / 15
+	bg_c_a.y = $Column2/BG_C/C/AG.value / 15
+	bg_c_a.z = $Column2/BG_C/C/AB.value / 15
+	bg_c_b.x = $Column2/BG_C/C/BR.value / 15
+	bg_c_b.y = $Column2/BG_C/C/BG.value / 15
+	bg_c_b.z = $Column2/BG_C/C/BB.value / 15
+	bg_t = $Column2/BG_C/T.value
+
 	view.render_complete = false
 
 

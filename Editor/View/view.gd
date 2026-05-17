@@ -16,8 +16,7 @@ func _process (_delta: float) -> void:
 	if not is_visible_in_tree():
 		return
 	render_if_needed()
-	var bg_c := editor.background_intensity * Vector3(1,1,1)
-	material.set_shader_parameter(&"bg_c", bg_c)
+	material.set_shader_parameter(&"bg_c", editor.background_color)
 
 
 func render_if_needed () -> void:

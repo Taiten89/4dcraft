@@ -18,10 +18,14 @@
 shader = ExtResource("1_vl7gr")
 shader_parameter/bg_c = Vector3(0, 0, 0)
 
+[sub_resource type="Theme" id="Theme_ry4s0"]
+LineEdit/constants/minimum_character_width = 2
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_765lj"]
 shader = ExtResource("9_motgv")
 shader_parameter/selected_i = 0
 shader_parameter/palette_size = 0
+shader_parameter/bg_c = Vector3(0, 0, 0)
 
 [node name="Editor" type="TabContainer" unique_id=210547686]
 anchors_preset = 15
@@ -103,6 +107,66 @@ layout_mode = 2
 min_value = 1.0
 value = 1.0
 editable = false
+
+[node name="Column2" type="VBoxContainer" parent="View_Settings" unique_id=685614857]
+layout_mode = 2
+
+[node name="BG_C" type="VBoxContainer" parent="View_Settings/Column2" unique_id=953593116]
+layout_mode = 2
+theme = SubResource("Theme_ry4s0")
+
+[node name="C_Label" type="Label" parent="View_Settings/Column2/BG_C" unique_id=1301745453]
+layout_mode = 2
+text = "Background Colors"
+
+[node name="C" type="HBoxContainer" parent="View_Settings/Column2/BG_C" unique_id=1254212007]
+layout_mode = 2
+
+[node name="A_Label" type="Label" parent="View_Settings/Column2/BG_C/C" unique_id=1490049757]
+layout_mode = 2
+text = "A "
+
+[node name="AR" type="SpinBox" parent="View_Settings/Column2/BG_C/C" unique_id=1871443269]
+layout_mode = 2
+max_value = 15.0
+
+[node name="AG" type="SpinBox" parent="View_Settings/Column2/BG_C/C" unique_id=2106796316]
+layout_mode = 2
+max_value = 15.0
+
+[node name="AB" type="SpinBox" parent="View_Settings/Column2/BG_C/C" unique_id=1016237093]
+layout_mode = 2
+max_value = 15.0
+
+[node name="B_Label" type="Label" parent="View_Settings/Column2/BG_C/C" unique_id=145887662]
+layout_mode = 2
+text = "  B "
+
+[node name="BR" type="SpinBox" parent="View_Settings/Column2/BG_C/C" unique_id=1739177194]
+layout_mode = 2
+max_value = 15.0
+value = 4.0
+
+[node name="BG" type="SpinBox" parent="View_Settings/Column2/BG_C/C" unique_id=1598459799]
+layout_mode = 2
+max_value = 15.0
+value = 4.0
+
+[node name="BB" type="SpinBox" parent="View_Settings/Column2/BG_C/C" unique_id=640810423]
+layout_mode = 2
+max_value = 15.0
+value = 4.0
+
+[node name="T_Label" type="Label" parent="View_Settings/Column2/BG_C" unique_id=2124929537]
+layout_mode = 2
+text = "BG Phase Time"
+
+[node name="T" type="SpinBox" parent="View_Settings/Column2/BG_C" unique_id=1157107406]
+layout_mode = 2
+min_value = 0.1
+max_value = 10.0
+step = 0.1
+value = 5.0
 
 [node name="Slice" type="VBoxContainer" parent="." unique_id=1696024702]
 visible = false

@@ -2,14 +2,13 @@ class_name Editor
 extends TabContainer
 
 const MAX_PRECISION := 10
-const BACKGROUND_INTENSITY_TIME := 5.0
-const MAX_BACKGROUND_INTENSITY := 0.25
 
 var slice := Slice.new()
 var slice_changed := false
-var background_intensity: float
+var background_color: Vector3
 
 @onready var root: Window = $/root
+@onready var view_settings: View_Settings = $View_Settings
 @onready var album: Album_Edit = $Album
 
 
@@ -20,7 +19,7 @@ func _ready () -> void:
 
 
 func _process (_delta: float) -> void:
-	update_background_intensity()
+	update_background_color()
 
 
 func _quit_game () -> void:
@@ -38,11 +37,12 @@ func exit_on_confirmation () -> void:
 	diag.popup()
 
 
-func update_background_intensity () -> void:
+func update_background_color () -> void:
 	var seconds := Time.get_ticks_msec() / 1000.0
-	var phases := seconds / BACKGROUND_INTENSITY_TIME
+	var phases := seconds / view_settings.bg_t
 	var phase := phases - int(phases)
-	background_intensity = cos(phase * TAU) * MAX_BACKGROUND_INTENSITY
+	var i := cos(phase * TAU)
+	background_color = i * view_settings.bg_c_a + (1-i) * view_settings.bg_c_b
 
 
 func _on_tab_selected (_tab: int) -> void:
