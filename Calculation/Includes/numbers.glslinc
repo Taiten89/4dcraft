@@ -1,0 +1,25 @@
+#ifdef USE_FLOATS
+#define NUMBER_T float
+
+#elif defined(USE_DOUBLES)
+#define NUMBER_T double
+
+#else
+#define NUMBER_T Fixed_Num
+const uint FN_DATA_SIZE = (PRECISION + 1) / 2;  // round-up division
+struct Fixed_Num
+{
+    uint data[FN_DATA_SIZE];
+};
+
+#endif
+
+#ifdef USE_DOUBLES
+#define VEC2 dvec2
+#define VEC3 dvec3
+#define VEC4 dvec4
+#else
+#define VEC2 vec2
+#define VEC3 vec3
+#define VEC4 vec4
+#endif

@@ -1,0 +1,16 @@
+#ifdef USE_FIXED
+#define FLOAT_T float
+#else
+#define FLOAT_T NUMBER_T
+#endif
+
+FLOAT_T to_float (const NUMBER_T bop);
+FLOAT_T to_float (int bop);
+void from_float (FLOAT_T f, int bresult);
+
+void copy (int bop, int bresult);
+void copy_position (int axis, int bresult);
+
+void add (int bop0, int bop1, int bresult);
+void sub (int bop0, int bop1, int bresult);
+void mul (int bop0, int bop1, int bresult);

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c0f2rrhl7qt8u"]
+
+[ext_resource type="Script" uid="uid://br8tfnl7xloqf" path="res://Slice/slice.gd" id="1_3f3ai"]
+
+[node name="Slice" type="Node" unique_id=246853190]
+script = ExtResource("1_3f3ai")

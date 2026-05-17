@@ -1,0 +1,415 @@
+[gd_scene format=3 uid="uid://bmm2gaj4acjhq"]
+
+[ext_resource type="Script" uid="uid://uih0hc8hurw5" path="res://Editor/editor.gd" id="1_55rxr"]
+[ext_resource type="Shader" uid="uid://c6ph5fh6rk62u" path="res://Editor/View/view.gdshader" id="1_vl7gr"]
+[ext_resource type="Script" uid="uid://c6ljarsin7nsp" path="res://Editor/View/view.gd" id="2_vl7gr"]
+[ext_resource type="Script" uid="uid://le11n6wl0hlh" path="res://Editor/Slice/slice_edit.gd" id="5_jdbf7"]
+[ext_resource type="Script" uid="uid://3ssp7ry3pmv4" path="res://Editor/View/input.gd" id="5_motgv"]
+[ext_resource type="Script" uid="uid://mfacjjktifrk" path="res://Editor/Slice/precision_edit.gd" id="6_8ctag"]
+[ext_resource type="Script" uid="uid://bt4imqwgdogxr" path="res://Editor/View/view_settings.gd" id="6_765lj"]
+[ext_resource type="Script" uid="uid://d2x03pliyg0ec" path="res://Editor/Slice/base.gd" id="7_motgv"]
+[ext_resource type="Script" uid="uid://bcl6mmrhthmfh" path="res://Editor/Slice/palette_edit.gd" id="9_765lj"]
+[ext_resource type="Shader" uid="uid://bm0u385ota7ym" path="res://Editor/Slice/palette.gdshader" id="9_motgv"]
+[ext_resource type="Script" uid="uid://b4efyvjw2tmbv" path="res://Editor/custom_code.gd" id="12_8l5dl"]
+[ext_resource type="Script" uid="uid://c5y2gawu7i12a" path="res://Editor/Album/album.gd" id="13_ry4s0"]
+[ext_resource type="Script" uid="uid://crr5dedmp5ugq" path="res://Editor/Album/view.gd" id="14_xkd0q"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8l5dl"]
+shader = ExtResource("1_vl7gr")
+shader_parameter/bg_c = Vector3(0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_765lj"]
+shader = ExtResource("9_motgv")
+shader_parameter/selected_i = 0
+shader_parameter/palette_size = 0
+
+[node name="Editor" type="TabContainer" unique_id=210547686]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+tab_focus_mode = 0
+script = ExtResource("1_55rxr")
+
+[node name="View" type="ColorRect" parent="." unique_id=478086116]
+material = SubResource("ShaderMaterial_8l5dl")
+layout_mode = 2
+focus_mode = 2
+script = ExtResource("2_vl7gr")
+metadata/_tab_index = 0
+
+[node name="Input" type="Node" parent="View" unique_id=1656315647]
+script = ExtResource("5_motgv")
+
+[node name="View_Settings" type="HBoxContainer" parent="." unique_id=215254171]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 30
+script = ExtResource("6_765lj")
+metadata/_tab_index = 1
+
+[node name="Column0" type="GridContainer" parent="View_Settings" unique_id=655093422]
+layout_mode = 2
+columns = 2
+
+[node name="Subsampling_Label" type="Label" parent="View_Settings/Column0" unique_id=1105503676]
+layout_mode = 2
+text = "Subsampling"
+
+[node name="Subsampling" type="SpinBox" parent="View_Settings/Column0" unique_id=1511376952]
+layout_mode = 2
+min_value = 1.0
+max_value = 16.0
+value = 1.0
+
+[node name="Workgroup_Label" type="Label" parent="View_Settings/Column0" unique_id=425050897]
+layout_mode = 2
+text = "Workgroup local size"
+
+[node name="Workgroup" type="HBoxContainer" parent="View_Settings/Column0" unique_id=695654220]
+layout_mode = 2
+
+[node name="Workgroup_W" type="SpinBox" parent="View_Settings/Column0/Workgroup" unique_id=854577328]
+layout_mode = 2
+min_value = 1.0
+max_value = 256.0
+value = 256.0
+
+[node name="Workgroup_H" type="SpinBox" parent="View_Settings/Column0/Workgroup" unique_id=1688608412]
+layout_mode = 2
+min_value = 1.0
+max_value = 256.0
+value = 1.0
+
+[node name="Column1" type="GridContainer" parent="View_Settings" unique_id=620065115]
+layout_mode = 2
+columns = 2
+
+[node name="Portrait_Label" type="Label" parent="View_Settings/Column1" unique_id=705481909]
+layout_mode = 2
+text = "Portrait mode"
+
+[node name="Portrait" type="CheckBox" parent="View_Settings/Column1" unique_id=2066505980]
+layout_mode = 2
+
+[node name="Portrait_N_Label" type="Label" parent="View_Settings/Column1" unique_id=1118324913]
+layout_mode = 2
+text = "Number of portrait images"
+
+[node name="Portrait_N" type="SpinBox" parent="View_Settings/Column1" unique_id=64453585]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+editable = false
+
+[node name="Slice" type="VBoxContainer" parent="." unique_id=1696024702]
+visible = false
+layout_mode = 2
+script = ExtResource("5_jdbf7")
+metadata/_tab_index = 2
+
+[node name="Details" type="HBoxContainer" parent="Slice" unique_id=1970628518]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Mode_Box" type="VBoxContainer" parent="Slice/Details" unique_id=870534723]
+layout_mode = 2
+
+[node name="Mode_Header" type="Label" parent="Slice/Details/Mode_Box" unique_id=335559157]
+layout_mode = 2
+text = "mode"
+
+[node name="Mode" type="ItemList" parent="Slice/Details/Mode_Box" unique_id=1639304708]
+custom_minimum_size = Vector2(200, 300)
+layout_mode = 2
+auto_width = true
+
+[node name="Props_Box" type="VBoxContainer" parent="Slice/Details" unique_id=560781048]
+layout_mode = 2
+
+[node name="Max_N_Header" type="Label" parent="Slice/Details/Props_Box" unique_id=1136559790]
+layout_mode = 2
+text = "max n iterations"
+
+[node name="Max_N" type="TextEdit" parent="Slice/Details/Props_Box" unique_id=851673439]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Precision_Header" type="Label" parent="Slice/Details/Props_Box" unique_id=1093795913]
+layout_mode = 2
+text = "number precision"
+
+[node name="Precision_Box" type="HBoxContainer" parent="Slice/Details/Props_Box" unique_id=2135659112]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Precision" type="SpinBox" parent="Slice/Details/Props_Box/Precision_Box" unique_id=1338109426]
+custom_minimum_size = Vector2(50, 30)
+layout_mode = 2
+script = ExtResource("6_8ctag")
+
+[node name="Precision_Repr" type="Label" parent="Slice/Details/Props_Box/Precision_Box" unique_id=1620760076]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Position_Box" type="VBoxContainer" parent="Slice/Details/Props_Box" unique_id=1715328645]
+layout_mode = 2
+
+[node name="Position_Header" type="Label" parent="Slice/Details/Props_Box/Position_Box" unique_id=1335586290]
+layout_mode = 2
+text = "position"
+
+[node name="Position0" type="TextEdit" parent="Slice/Details/Props_Box/Position_Box" unique_id=1675439733]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Position1" type="TextEdit" parent="Slice/Details/Props_Box/Position_Box" unique_id=1673893408]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Position2" type="TextEdit" parent="Slice/Details/Props_Box/Position_Box" unique_id=1020471883]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Position3" type="TextEdit" parent="Slice/Details/Props_Box/Position_Box" unique_id=1901886834]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Base" type="HBoxContainer" parent="Slice/Details" unique_id=368221451]
+layout_mode = 2
+script = ExtResource("7_motgv")
+
+[node name="L" type="VBoxContainer" parent="Slice/Details/Base" unique_id=539062774]
+layout_mode = 2
+
+[node name="Matrix_Header" type="Label" parent="Slice/Details/Base/L" unique_id=2091613571]
+layout_mode = 2
+text = "Base / Matrix"
+
+[node name="Matrix_Repr" type="GridContainer" parent="Slice/Details/Base/L" unique_id=1260992600]
+layout_mode = 2
+columns = 4
+
+[node name="Length_Header" type="Label" parent="Slice/Details/Base/L" unique_id=781755152]
+layout_mode = 2
+text = "Base / Length"
+
+[node name="Length" type="TextEdit" parent="Slice/Details/Base/L" unique_id=1355130630]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="R" type="VBoxContainer" parent="Slice/Details/Base" unique_id=1636412235]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="Slice/Details/Base/R" unique_id=1460258204]
+layout_mode = 2
+
+[node name="Reset" type="Button" parent="Slice/Details/Base/R" unique_id=1862832128]
+layout_mode = 2
+text = "Reset Matrix"
+
+[node name="Mirror_Separator" type="HSeparator" parent="Slice/Details/Base/R" unique_id=1634107500]
+layout_mode = 2
+
+[node name="Mirror" type="Button" parent="Slice/Details/Base/R" unique_id=1681226197]
+layout_mode = 2
+text = "Mirror"
+
+[node name="Axis" type="OptionButton" parent="Slice/Details/Base/R" unique_id=1194857485]
+layout_mode = 2
+
+[node name="Turn_Separator" type="HSeparator" parent="Slice/Details/Base/R" unique_id=1677461238]
+layout_mode = 2
+
+[node name="Turn" type="Button" parent="Slice/Details/Base/R" unique_id=955237180]
+layout_mode = 2
+text = "Turn by 45°"
+
+[node name="Axes" type="OptionButton" parent="Slice/Details/Base/R" unique_id=1345436266]
+layout_mode = 2
+
+[node name="Palette" type="HBoxContainer" parent="Slice" unique_id=1851196051]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("9_765lj")
+
+[node name="Gradient" type="ColorRect" parent="Slice/Palette" unique_id=1577038101]
+material = SubResource("ShaderMaterial_765lj")
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Input_Box" type="VBoxContainer" parent="Slice/Palette" unique_id=1883218588]
+layout_mode = 2
+
+[node name="Item_Box" type="HBoxContainer" parent="Slice/Palette/Input_Box" unique_id=934805825]
+layout_mode = 2
+
+[node name="Add_Input" type="Button" parent="Slice/Palette/Input_Box/Item_Box" unique_id=173528696]
+layout_mode = 2
+text = "+"
+
+[node name="Remove_Input" type="Button" parent="Slice/Palette/Input_Box/Item_Box" unique_id=521660382]
+layout_mode = 2
+text = "-"
+
+[node name="R_Input" type="SpinBox" parent="Slice/Palette/Input_Box" unique_id=1740806684]
+layout_mode = 2
+max_value = 15.0
+
+[node name="G_Input" type="SpinBox" parent="Slice/Palette/Input_Box" unique_id=302913489]
+layout_mode = 2
+max_value = 15.0
+
+[node name="B_Input" type="SpinBox" parent="Slice/Palette/Input_Box" unique_id=1340181208]
+layout_mode = 2
+max_value = 15.0
+
+[node name="A_Input" type="SpinBox" parent="Slice/Palette/Input_Box" unique_id=1197130189]
+layout_mode = 2
+max_value = 15.0
+
+[node name="Custom_Code" type="CodeEdit" parent="." unique_id=1128772097]
+visible = false
+layout_mode = 2
+minimap_draw = true
+draw_control_chars = true
+draw_tabs = true
+draw_spaces = true
+line_length_guidelines = Array[int]([80])
+indent_use_spaces = true
+indent_automatic = true
+script = ExtResource("12_8l5dl")
+metadata/_tab_index = 3
+
+[node name="Album" type="HBoxContainer" parent="." unique_id=1372261034]
+visible = false
+layout_mode = 2
+script = ExtResource("13_ry4s0")
+metadata/_tab_index = 4
+
+[node name="Actions" type="VBoxContainer" parent="Album" unique_id=614627197]
+layout_mode = 2
+
+[node name="Main_Separator" type="HSeparator" parent="Album/Actions" unique_id=485044921]
+layout_mode = 2
+
+[node name="From_Main" type="Button" parent="Album/Actions" unique_id=26219302]
+layout_mode = 2
+text = "From Main"
+
+[node name="To_Main" type="Button" parent="Album/Actions" unique_id=1403665294]
+layout_mode = 2
+text = "To Main"
+
+[node name="Delete" type="Button" parent="Album/Actions" unique_id=1421941439]
+layout_mode = 2
+text = "Delete"
+
+[node name="File_Separator" type="HSeparator" parent="Album/Actions" unique_id=2086468317]
+layout_mode = 2
+
+[node name="New" type="Button" parent="Album/Actions" unique_id=2065001796]
+layout_mode = 2
+text = "New"
+
+[node name="Save" type="Button" parent="Album/Actions" unique_id=1139640175]
+layout_mode = 2
+text = "Save"
+
+[node name="Save_As" type="Button" parent="Album/Actions" unique_id=1314754270]
+layout_mode = 2
+text = "Save As"
+
+[node name="Open" type="Button" parent="Album/Actions" unique_id=120858185]
+layout_mode = 2
+text = "Open"
+
+[node name="Extend_Separator" type="HSeparator" parent="Album/Actions" unique_id=1265298042]
+layout_mode = 2
+
+[node name="Extend_Label" type="Label" parent="Album/Actions" unique_id=1472493442]
+layout_mode = 2
+text = "Extend"
+
+[node name="Extend" type="GridContainer" parent="Album/Actions" unique_id=1138965932]
+layout_mode = 2
+columns = 3
+
+[node name="_00" type="Control" parent="Album/Actions/Extend" unique_id=1725538178]
+layout_mode = 2
+
+[node name="U" type="Button" parent="Album/Actions/Extend" unique_id=416140362]
+layout_mode = 2
+text = "↑"
+
+[node name="_20" type="Control" parent="Album/Actions/Extend" unique_id=825649578]
+layout_mode = 2
+
+[node name="L" type="Button" parent="Album/Actions/Extend" unique_id=1923249960]
+layout_mode = 2
+text = "←"
+
+[node name="_11" type="Control" parent="Album/Actions/Extend" unique_id=2066280036]
+layout_mode = 2
+
+[node name="R" type="Button" parent="Album/Actions/Extend" unique_id=2014223959]
+layout_mode = 2
+text = "→"
+
+[node name="_02" type="Control" parent="Album/Actions/Extend" unique_id=1679332127]
+layout_mode = 2
+
+[node name="D" type="Button" parent="Album/Actions/Extend" unique_id=2044177035]
+layout_mode = 2
+text = "↓"
+
+[node name="View" type="ColorRect" parent="Album" unique_id=1116686632]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="View" type="TextureRect" parent="Album/View" unique_id=1903788539]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+expand_mode = 2
+stretch_mode = 5
+script = ExtResource("14_xkd0q")
+
+[connection signal="tab_selected" from="." to="." method="_on_tab_selected"]
+[connection signal="visibility_changed" from="View_Settings" to="View_Settings" method="_on_visibility_changed"]
+[connection signal="value_changed" from="View_Settings/Column0/Workgroup/Workgroup_W" to="View_Settings" method="_on_workgroup_w_changed"]
+[connection signal="value_changed" from="View_Settings/Column0/Workgroup/Workgroup_H" to="View_Settings" method="_on_workgroup_h_changed"]
+[connection signal="toggled" from="View_Settings/Column1/Portrait" to="View_Settings" method="_on_portrait_toggled"]
+[connection signal="visibility_changed" from="Slice" to="Slice" method="_on_visibility_changed"]
+[connection signal="value_changed" from="Slice/Details/Props_Box/Precision_Box/Precision" to="Slice/Details/Props_Box/Precision_Box/Precision" method="_on_value_changed"]
+[connection signal="pressed" from="Slice/Details/Base/R/Reset" to="Slice/Details/Base" method="_on_reset_pressed"]
+[connection signal="pressed" from="Slice/Details/Base/R/Mirror" to="Slice/Details/Base" method="_on_mirror_pressed"]
+[connection signal="pressed" from="Slice/Details/Base/R/Turn" to="Slice/Details/Base" method="_on_turn_pressed"]
+[connection signal="gui_input" from="Slice/Palette/Gradient" to="Slice/Palette" method="_on_gradient_gui_input"]
+[connection signal="pressed" from="Slice/Palette/Input_Box/Item_Box/Add_Input" to="Slice/Palette" method="_on_add_pressed"]
+[connection signal="pressed" from="Slice/Palette/Input_Box/Item_Box/Remove_Input" to="Slice/Palette" method="_on_remove_pressed"]
+[connection signal="value_changed" from="Slice/Palette/Input_Box/R_Input" to="Slice/Palette" method="_on_rgba_value_changed"]
+[connection signal="value_changed" from="Slice/Palette/Input_Box/G_Input" to="Slice/Palette" method="_on_rgba_value_changed"]
+[connection signal="value_changed" from="Slice/Palette/Input_Box/B_Input" to="Slice/Palette" method="_on_rgba_value_changed"]
+[connection signal="value_changed" from="Slice/Palette/Input_Box/A_Input" to="Slice/Palette" method="_on_rgba_value_changed"]
+[connection signal="text_changed" from="Custom_Code" to="Custom_Code" method="_on_text_changed"]
+[connection signal="visibility_changed" from="Custom_Code" to="Custom_Code" method="_on_visibility_changed"]
+[connection signal="pressed" from="Album/Actions/From_Main" to="Album" method="_on_from_main_pressed"]
+[connection signal="pressed" from="Album/Actions/To_Main" to="Album" method="_on_to_main_pressed"]
+[connection signal="pressed" from="Album/Actions/Delete" to="Album" method="_on_delete_pressed"]
+[connection signal="pressed" from="Album/Actions/New" to="Album" method="_on_new_pressed"]
+[connection signal="pressed" from="Album/Actions/Save" to="Album" method="_on_save_pressed"]
+[connection signal="pressed" from="Album/Actions/Save_As" to="Album" method="_on_save_as_pressed"]
+[connection signal="pressed" from="Album/Actions/Open" to="Album" method="_on_open_pressed"]
+[connection signal="pressed" from="Album/Actions/Extend/U" to="Album" method="_on_extend_u_pressed"]
+[connection signal="pressed" from="Album/Actions/Extend/L" to="Album" method="_on_extend_l_pressed"]
+[connection signal="pressed" from="Album/Actions/Extend/R" to="Album" method="_on_extend_r_pressed"]
+[connection signal="pressed" from="Album/Actions/Extend/D" to="Album" method="_on_extend_d_pressed"]
+[connection signal="gui_input" from="Album/View/View" to="Album/View/View" method="_on_gui_input"]

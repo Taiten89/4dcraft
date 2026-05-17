@@ -1,0 +1,115 @@
+//mbx_2025, an nD Mandelbrot fractal extension,
+//part of 4DCraft, designed in 2025
+
+const int
+    // C
+    R=POS0,  S=POS1,  T=POS2,  U=POS3,
+    // Z
+    r=TMP0+1,  s=TMP0+2,  t=TMP0+3,  u=TMP0+4,
+    // 4th component of Z times 2
+    _2u=TMP0+5,
+    // squared value of each component of Z
+    r2=TMP0+6,  s2=TMP0+7,  t2=TMP0+8,  u2=TMP0+9,
+    // Z² (= Z∘Z); temporary values
+    _r=TMP0+10,  _s=TMP0+11,  _t=TMP0+12,  _u=TMP0+13;
+
+const int N_TMP_BUFFERS = _u + 1 - TMP0;
+
+#define ESCAPE 2
+#define ESCAPE2 (ESCAPE*ESCAPE)
+
+
+/*
+// formula using vec4's:
+int compute ()
+{
+    VEC4 C;
+    for (int axis=0; axis<4; axis++)
+        C[axis] = to_float(POS0 + axis);
+
+    VEC4 Z = VEC4(0,0,0,0);  // zero perturbation
+    VEC4 Zsc = Z * Z;  // squared components
+    for (int n=0; n<max_n; n++)
+    {
+        Z = C + VEC4(Z.x * (2*Z.w + Z.y + Z.z),
+                     Z.y * (2*Z.w + Z.z + Z.x),
+                     Z.z * (2*Z.w + Z.x + Z.y),
+                     Zsc.w - Zsc.x - Zsc.y - Zsc.z);
+
+        Zsc = Z * Z;
+
+        FLOAT_T sum_sc = 0.0;
+        for (int axis=0; axis<4; axis++)
+            sum_sc += Zsc[axis];
+        if (sum_sc > ESCAPE2)
+            return n;
+    }
+
+    return max_n;
+}
+*/
+
+
+void make_squared_components ()
+{
+    for (int a=0; a<4; a++)
+        mul(r + a, r + a, r2 + a);
+}
+
+
+bool is_escaping ()
+{
+    const int TMP1 = _r;
+    add(r2, s2, TMP0);  // r² + s²
+    add(TMP0, t2, TMP1);  // r² + s² + t²
+    add(TMP1, u2, TMP0);  // r² + s² + t² + u²
+#ifdef USE_FIXED
+    uint whole_part = num_buffers[TMP0].data[0] & 0x7fff;
+    return whole_part >= ESCAPE2;
+#else
+    FLOAT_T sum_squared_comp = to_float(TMP0);
+    return sum_squared_comp > ESCAPE2;
+#endif
+}
+
+
+// formula using add/sub/mul:
+int compute ()
+{
+    for (int axis=0; axis<4; axis++)
+    {
+        from_float(0.0, r+axis);  // zero perturbation
+        from_float(0.0, r2+axis);  // zero, squared
+    }
+
+    for (int n=0; n<max_n; n++)
+    {
+        add(u, u, _2u);
+
+        add(_2u, s, _r);   // 2·u + s
+        add(_r, t, TMP0);  // 2·u + s + t
+        mul(r, TMP0, _r);  // r · (2·u + s + t)
+
+        add(_2u, t, _s);   // 2·u + t
+        add(_s, r, TMP0);  // 2·u + t + r
+        mul(s, TMP0, _s);  // s · (2·u + t + r)
+
+        add(_2u, r, _t);    // 2·u + r
+        add(_t, s, TMP0);   // 2·u + r + s
+        mul(t, TMP0, _t);  // t · (2·u + r + s)
+
+        sub(u2, r2, _u);   // u² - r²
+        sub(_u, s2, TMP0);  // u² - r² - s²
+        sub(TMP0, t2, _u);  // u² - r² - s² - t²
+
+        for (int a=0; a<4; a++)
+            add(R+a, _r+a, r+a);  // Z' = C + Z∘Z
+
+        make_squared_components();
+
+        if (is_escaping())
+            return n;
+    }
+
+    return max_n;
+}

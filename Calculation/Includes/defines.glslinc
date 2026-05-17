@@ -1,0 +1,9 @@
+#define W 200
+#define H 100
+#define SUBSAMPLING 1
+
+#define LOCAL_SIZE_X 256
+#define LOCAL_SIZE_Y 1
+
+#define USE_FIXED
+#define PRECISION 5

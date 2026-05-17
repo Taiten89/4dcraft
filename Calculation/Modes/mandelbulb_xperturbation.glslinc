@@ -1,0 +1,44 @@
+//Using the Mandelbulb formula according to:
+//https://archive.bridgesmathart.org/2010/bridges2010-247.pdf
+//Perturbation is added in the first component for extension to 4D.
+//The number precision is limited to "4" / "doubles".
+
+const int N_TMP_BUFFERS = 0;
+
+
+int compute ()
+{
+    VEC4 position;
+    for (int a=0; a<4; a++)  position[a] = to_float(POS0+a);
+
+    const VEC3 c = position.xyz;
+    VEC3 z = VEC3(position.w, 0, 0);
+
+    VEC3 sc = z * z;  // squared components
+
+    for (int n=0; n<max_n; n++)
+    {
+        // avoid division by zero in formula below
+        FLOAT_T sqrt_y2_z2 = sqrt(sc.y + sc.z);
+        if (abs(sqrt_y2_z2) < 1.0 / 65536.0 / 64.0)
+        {
+            if (sqrt_y2_z2 > 0.0)
+                sqrt_y2_z2 = 1.0 / 65536.0 / 64.0;
+            else
+                sqrt_y2_z2 = -1.0 / 65536.0 / 64.0;
+        }
+
+        // apply formula
+        z = c + VEC3
+            (sc.x - sc.y - sc.z,
+             4*z.x*z.y*z.z / sqrt_y2_z2,
+             2*z.x*(-sc.y+sc.z) / sqrt_y2_z2);
+
+        // update sc, bail out
+        sc = z * z;
+        if (sc.x + sc.y + sc.z > 4)
+            return n;
+    }
+
+    return max_n;
+}

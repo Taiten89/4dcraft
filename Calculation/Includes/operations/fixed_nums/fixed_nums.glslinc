@@ -1,0 +1,197 @@
+float to_float (const Fixed_Num number)
+{
+    float result = 0.0, base = 1.0;
+    for (int place=0; place<PRECISION; place++)
+    {
+        result += base * GET_PART(number, place);
+        base /= 0x10000;
+    }
+    return GET_SIGNUM(number) * result;
+}
+
+float to_float (int bop)
+{
+    return to_float(num_buffers[bop]);
+}
+
+void from_float (float f, int bresult)
+{
+    bool isNegative = f < 0;
+    if (isNegative)
+        f = -f;
+
+    for (int place=0; place<PRECISION; place++)
+    {
+        uint uintf = uint(f);
+        SET_PART(num_buffers[bresult], place, uintf)
+        f -= uintf;
+        f *= 0x10000;
+    }
+
+    if (isNegative)
+        SET_SIGNUM_NEGATIVE(num_buffers[bresult])
+    else
+        SET_SIGNUM_POSITIVE(num_buffers[bresult])
+}
+
+void copy (int bop, int bresult)
+{
+    num_buffers[bresult] = num_buffers[bop];
+}
+void copy_position (int axis, int bresult)
+{
+    num_buffers[bresult] = mid_position[axis];
+}
+
+bool _isAbsGreater (int bop0, int bop1)
+{
+    for (int place=0; place<PRECISION; place++)
+    {
+        int a = GET_PART(num_buffers[bop0], place),
+            b = GET_PART(num_buffers[bop1], place);
+        if (a > b)
+            return true;
+        if (a < b)
+            return false;
+    }
+    return false;
+}
+
+void _doAdd (int bop0, int bop1, int bresult)
+{
+    int carry = 0;
+    for (int place=PRECISION-1; place>=0; place--)
+    {
+        int a = GET_PART(num_buffers[bop0], place),
+            b = GET_PART(num_buffers[bop1], place);
+        int resultPart = a + b + carry;
+        carry = 0;
+        if (resultPart >= 0x10000)
+        {
+            resultPart -= 0x10000;
+            carry = +1;
+        }
+        SET_PART(num_buffers[bresult], place, resultPart)
+    }
+}
+
+void _doSub (int bop0, int bop1, int bresult)
+{
+    int carry = 0;
+    for (int place=PRECISION-1; place>=0; place--)
+    {
+        int a = GET_PART(num_buffers[bop0], place),
+            b = GET_PART(num_buffers[bop1], place);
+        int resultPart = a - b - carry;
+        carry = 0;
+        if (resultPart < 0)
+        {
+            resultPart += 0x10000;
+            carry = 1;
+        }
+        SET_PART(num_buffers[bresult], place, resultPart)
+    }
+}
+
+void _add (int bop0, int bop1, int bresult, int signum)
+{
+    int s0 = GET_SIGNUM(num_buffers[bop0]),
+        s1 = GET_SIGNUM(num_buffers[bop1]) * signum;
+
+    if (s0 == +1 && s1 == +1)
+    {
+        _doAdd(bop0, bop1, bresult);
+        SET_SIGNUM_POSITIVE(num_buffers[bresult])
+        return;
+    }
+
+    if (s0 == -1 && s1 == -1)
+    {
+        _doAdd(bop0, bop1, bresult);
+        SET_SIGNUM_NEGATIVE(num_buffers[bresult])
+        return;
+    }
+
+    // signa are different
+
+    if (_isAbsGreater(bop0, bop1))
+    {
+        _doSub(bop0, bop1, bresult);
+        if (s0 == +1)
+            SET_SIGNUM_POSITIVE(num_buffers[bresult])
+        else
+            SET_SIGNUM_NEGATIVE(num_buffers[bresult])
+    }
+    else
+    {
+        _doSub(bop1, bop0, bresult);
+        if (s1 == +1)
+            SET_SIGNUM_POSITIVE(num_buffers[bresult])
+        else
+            SET_SIGNUM_NEGATIVE(num_buffers[bresult])
+    }
+}
+
+void add (int bop0, int bop1, int bresult)
+{
+    _add(bop0, bop1, bresult, +1);
+}
+void sub (int bop0, int bop1, int bresult)
+{
+    _add(bop0, bop1, bresult, -1);
+}
+
+void mul(int bop0, int bop1, int bresult)
+{
+    SET_TO_ZERO(num_buffers[bresult])
+
+    uint previousCarry = 0;
+    for (int place0=PRECISION-1; place0>=0; place0--)
+    // PRECISION-1: "-1" improves performance
+    {
+        uint carry = 0;
+        for (int place1=PRECISION-place0; place1>=0; place1--)
+        {
+            int placeR = place0 + place1;
+
+            int a = GET_PART(num_buffers[bop0], place0),
+                b = place1<=PRECISION-1 ? GET_PART(num_buffers[bop1], place1)
+                                        : 0;
+            uint ab = uint(a) * uint(b);
+
+            uint previousPart = placeR<=PRECISION-1 ?
+                GET_PART(num_buffers[bresult], placeR) :
+                0;
+
+            // ab + previousPart cannot exceed the bounds;
+            // this can be confirmed with e.g. a web browser console prompt:
+            //> const ab_plus_prev = (2**16 - 1)**2 + (2**16 - 1);
+            //> const max32 = 2**32 - 1;
+            //> max32 - ab_plus_prev
+            //65535
+            // Even with carry, the bounds are not exceeded*.
+
+            uint abPlusPrev = ab + previousPart + carry;
+            int resultPart = int(abPlusPrev & 0xffffu);
+            carry = abPlusPrev >> 16;
+            if (placeR <= PRECISION-1)
+                SET_PART(num_buffers[bresult], placeR, resultPart)
+
+            if (place1 == 0)
+            {
+                // *In extreme cases, the bounds will be exceeded
+                // with the additional previousCarry.
+                resultPart += int(previousCarry);
+                carry += resultPart >> 16;
+                resultPart &= 0xffff;
+                if (placeR <= PRECISION-1)
+                    SET_PART(num_buffers[bresult], placeR, resultPart)
+                previousCarry = carry;
+            }
+        }
+    }
+
+    int resultSignum = GET_SIGNUM(num_buffers[bop0]) *
+        GET_SIGNUM(num_buffers[bop1]);
+    SET_SIGNUM(num_buffers[bresult], resultSignum)
+}

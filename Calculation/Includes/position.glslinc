@@ -1,0 +1,18 @@
+const int N_TMP_BUFFERS_POSITION = 2;
+
+void make_position (int X, int Y)
+{
+    vec2 upper_left = vec2(-1, 1);
+    vec2 ul_offset = vec2(2,-2) * vec2(X,Y) / vec2(W,H);
+    vec2 screen_position = upper_left + ul_offset;
+    vec4 relative_position = \
+        screen_position.x*render_x + screen_position.y*render_y;
+
+    const int TMP1 = TMP0 + 1;
+    for (int a=0; a<4; a++)
+    {
+        copy_position(a, TMP0);
+        from_float(relative_position[a], TMP1);
+        add(TMP0, TMP1, POS0+a);
+    }
+}

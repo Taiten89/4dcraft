@@ -1,0 +1,54 @@
+#define GET_SIGNUM(number) \
+    (+1 - 2 * int(_GET_SIGNUM_BIT(number)))
+
+#define _GET_SIGNUM_BIT(number) \
+    (((number).data[0] >> 15) & 1u)
+
+
+#define GET_PART(number, place) \
+    _MASK_SIGNUM_IN_INT(number, place, (place) / 2, (place) & 1)
+
+#define _MASK_SIGNUM_IN_INT(number, place, dataIndex, isOdd)       \
+    (place==0 ? _PART_AS_INT(number, dataIndex, isOdd) & ~0x8000   \
+              : _PART_AS_INT(number, dataIndex, isOdd))
+
+#define _PART_AS_INT(number, dataIndex, isOdd) \
+    int(_SHIFT_AND_MASK_PART((number).data[dataIndex], isOdd))
+
+#define _SHIFT_AND_MASK_PART(rawDataElement, isOdd) \
+    (_SHIFT_PART(rawDataElement, isOdd) & 0xffffu)
+
+#define _SHIFT_PART(rawDataElement, isOdd) \
+    ((rawDataElement) >> ((isOdd) * 16))
+
+
+#define SET_SIGNUM_POSITIVE(number) \
+    (number).data[0] &= ~0x8000u;
+
+#define SET_SIGNUM_NEGATIVE(number) \
+    (number).data[0] |= 0x8000u;
+
+#define SET_SIGNUM(number, signum) \
+    _SET_SIGNUM_BIT(number, (-((signum)-1)) / 2)
+
+#define _SET_SIGNUM_BIT(number, bit)       \
+{                                          \
+    (number).data[0] &= ~0x8000u;          \
+    (number).data[0] |= uint(bit) << 15;   \
+}
+
+
+#define SET_TO_ZERO(number)                  \
+{                                            \
+    for (int di=0; di<FN_DATA_SIZE; di++)    \
+        (number).data[di] = 0u;              \
+}
+
+
+#define SET_PART(number, place, part)                        \
+{                                                            \
+    int isOdd = (place) & 1;                                 \
+    int dataIndex = (place) / 2;                             \
+    (number).data[dataIndex] &= 0xffff0000u >> (isOdd*16);   \
+    (number).data[dataIndex] |= uint(part) << (isOdd*16);    \
+}

@@ -1,0 +1,63 @@
+//Mandelbrot fractal, extended to 4D using perturbation.
+
+#define ESCAPE 2
+#define ESCAPE2 (ESCAPE*ESCAPE)
+
+const int
+    RE_C=POS0,  IM_C=POS1,
+    RE_Z=POS2,  IM_Z=POS3,  // 3rd and 4th axis => perturbation
+    TMP1=TMP0+1, TMP2=TMP0+2,
+    RE_Z_2=TMP0, IM_Z_2=TMP1;  // squared components of Z
+
+const int N_TMP_BUFFERS = TMP2 + 1 - TMP0;
+
+
+void make_squared_components ()
+{
+    mul(RE_Z, RE_Z, RE_Z_2);
+    mul(IM_Z, IM_Z, IM_Z_2);
+}
+
+
+bool is_escaping ()
+{
+    add(RE_Z_2, IM_Z_2, TMP2);  // re(z)² + im(z)²
+#ifdef USE_FIXED
+    uint whole_part = num_buffers[TMP2].data[0] & 0x7fff;
+    return whole_part >= ESCAPE2;
+#else
+    FLOAT_T tmp2 = num_buffers[TMP2];
+    return tmp2 > ESCAPE2;
+#endif
+}
+
+
+int compute ()
+{
+    make_squared_components();
+
+    for (int n=0; n<max_n; n++)
+    {
+        // z' = z² + c
+        // z² = (re(z) + im(z)·i)² = re(z)² + 2·re(z)·im(z)·i + (im(z)·i)²
+        //    = re(z)² - im(z)² + 2·re(z)·im(z) · i
+
+        // re(z²) = re(z)² - im(z)²
+        sub(RE_Z_2, IM_Z_2, TMP2);
+        // re(z)·im(z)
+        mul(RE_Z, IM_Z, TMP0);
+        // im(z²) = 2·re(z)·im(z)
+        add(TMP0, TMP0, TMP1);
+        // re(z') = re(z²) + re(c)
+        add(TMP2, RE_C, RE_Z);
+        // im(z') = im(z²) + im(c)
+        add(TMP1, IM_C, IM_Z);
+
+        make_squared_components();
+
+        if (is_escaping())
+            return n;
+    }
+
+    return max_n;
+}

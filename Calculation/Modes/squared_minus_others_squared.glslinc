@@ -1,0 +1,69 @@
+//squared_minus_others_squared, a simple nD Mandelbrot-like formula
+
+const int
+    R=POS0,  S=POS1,  T=POS2,  U=POS3,  // C
+    TMP1=TMP0+1,
+    r=TMP1+1,  s=r+1,  t=r+2,  u=r+3,  // Z
+    r2=u+1,  s2=r2+1,  t2=r2+2,  u2=r2+3;  // squared components of Z
+
+const int N_TMP_BUFFERS = u2 + 1 - TMP0;
+
+#define ESCAPE 2
+#define ESCAPE2 (ESCAPE*ESCAPE)
+
+
+void make_squared_components ()
+{
+    for (int a=0; a<4; a++)
+        mul(r + a, r + a, r2 + a);
+}
+
+
+bool is_escaping ()
+{
+    add(r2, s2, TMP0);  // r² + s²
+    add(TMP0, t2, TMP1);  // r² + s² + t²
+    add(TMP1, u2, TMP0);  // r² + s² + t² + u²
+#ifdef USE_FIXED
+    uint whole_part = num_buffers[TMP0].data[0] & 0x7fff;
+    return whole_part >= ESCAPE2;
+#else
+    FLOAT_T sum_squared_comp = to_float(TMP0);
+    return sum_squared_comp > ESCAPE2;
+#endif
+}
+
+
+int compute()
+{
+    for (int axis=0; axis<4; axis++)
+    {
+        from_float(0.0, r+axis);  // zero perturbation
+        from_float(0.0, r2+axis);  // zero, squared
+    }
+
+    for (int n=0; n<max_n; n++)
+    {
+
+        for (int axis=0; axis<4; axis++)
+        {
+            // r' = R + r² - s² - t² - u²
+            // s' = S + s² - t² - u² - r²
+            // ...
+            int
+                axis1 = (axis+1) % 4,
+                axis2 = (axis+2) % 4,
+                axis3 = (axis+3) % 4;
+            add(R+axis, r2+axis, TMP0);  // X + x²
+            sub(TMP0, r2+axis1, r+axis);  // X + x² - y²
+            sub(r+axis, r2+axis2, TMP0);  // X + x² - y² - z²
+            sub(TMP0, r2+axis3, r+axis);  // X + x² - y² - z² - w²
+        }
+
+        make_squared_components();
+
+        if (is_escaping())
+            return n;
+    }
+    return max_n;
+}
