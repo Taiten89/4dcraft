@@ -4,7 +4,7 @@ extends HBoxContainer
 const FN_EXT := ".json"
 
 var album := Album.new()
-var album_changed := false
+var album_changed := true
 var xi := 0
 var yi := 0
 var current_fn := ""
@@ -12,10 +12,6 @@ var has_unsaved_changes := false
 
 @onready var editor: Editor = $/root/Editor
 @onready var view: TextureRect = $View/View
-
-
-func _ready () -> void:
-	view.texture = ImageTexture.create_from_image(album.image)
 
 
 func _process (_delta: float) -> void:
