@@ -1,5 +1,5 @@
 class_name Calculation
-extends Node
+extends RefCounted
 
 
 var slice: Slice

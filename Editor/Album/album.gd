@@ -15,7 +15,6 @@ var has_unsaved_changes := false
 
 
 func _ready () -> void:
-	album.paint = Slice_Paint.new(Calculation.new())
 	view.texture = ImageTexture.create_from_image(album.image)
 
 

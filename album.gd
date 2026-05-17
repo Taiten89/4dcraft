@@ -13,7 +13,6 @@ var items: Array[Slice] = []
 var image: Image
 const IMAGE_FORMAT := Image.FORMAT_RGBAF
 
-var paint: Slice_Paint
 var aa_factor := 4
 
 
@@ -74,6 +73,7 @@ func set_from_storage_variant (v: Dictionary) -> void:
 
 
 func render (x: int, y: int) -> void:
+	var paint := Slice_Paint.new(Calculation.new())
 	var item := get_item(x, y)
 	var rect := Rect2i(x*ew, y*eh, ew, eh)
 
