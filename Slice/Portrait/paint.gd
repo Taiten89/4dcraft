@@ -1,8 +1,10 @@
 class_name Portrait_Paint
 extends RefCounted
 
-var slice_paint: Slice_Paint
+var i: int
 var portrait: Portrait
+var params: Calculation.Params
+var slice_paint: Slice_Paint
 var result: Texture2DRD
 
 
@@ -10,30 +12,38 @@ func _init (calculation: Calculation) -> void:
 	slice_paint = Slice_Paint.new(calculation)
 
 
-func paint (new_portrait: Portrait, params: Calculation.Params) -> void:
+func paint (new_portrait: Portrait, new_params: Calculation.Params) -> void:
+	start(new_portrait, new_params)
+	for s in range(n_steps()):
+		step()
+
+
+func start (new_portrait: Portrait, new_params: Calculation.Params) -> void:
+	i = 0
 	portrait = new_portrait
-	var slices := portrait.slices
-	var distances := portrait.distances
-	update_alpha(distances[0])
-	paint_slice(slices[0], params, true)
-	for i in range(1, slices.size()):
-		update_alpha(distances[i])
-		paint_slice(slices[i], params, false)
-	portrait = null
+	params = new_params
+
+
+func n_steps () -> int:
+	return portrait.slices.size()
+
+
+func step () -> void:
+	var n: float = portrait.slices.size()
+	var relative_distance := portrait.distances[i] / portrait.max_distance
+	# alpha forged to fit usage
+	slice_paint.alpha = (1 - relative_distance) ** (1 + n/5000)
+	slice_paint.paint(modified_slice(portrait.slices[i]), params, i == 0)
+
+	if i == n_steps() - 1:
+		portrait = null
+	result = slice_paint.result
+	i += 1
 
 
 func interpolate () -> void:
 	slice_paint.interpolate()
 	result = slice_paint.result
-
-
-func update_alpha (distance: float) -> void:
-	var relative_distance := distance / portrait.max_distance
-	slice_paint.alpha = 1 - relative_distance
-
-
-func paint_slice (slice: Slice, params: Calculation.Params, clear_bg: bool) -> void:
-	slice_paint.paint(modified_slice(slice), params, clear_bg)
 
 
 func modified_slice (orig_slice: Slice) -> Slice:
