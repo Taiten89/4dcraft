@@ -41,7 +41,7 @@ func update_background_color () -> void:
 	var seconds := Time.get_ticks_msec() / 1000.0
 	var phases := seconds / view_settings.bg_t
 	var phase := phases - int(phases)
-	var i := cos(phase * TAU)
+	var i := (1 + cos(phase * TAU)) / 2
 	background_color = i * view_settings.bg_c_a + (1-i) * view_settings.bg_c_b
 
 

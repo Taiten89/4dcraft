@@ -35,12 +35,12 @@ func push_to_view () -> void:
 	vparams.workgroup_w = int(workgroup_w.value)
 	vparams.workgroup_h = int(workgroup_h.value)
 
-	bg_c_a.x = $Column2/BG_C/C/AR.value / 15
-	bg_c_a.y = $Column2/BG_C/C/AG.value / 15
-	bg_c_a.z = $Column2/BG_C/C/AB.value / 15
-	bg_c_b.x = $Column2/BG_C/C/BR.value / 15
-	bg_c_b.y = $Column2/BG_C/C/BG.value / 15
-	bg_c_b.z = $Column2/BG_C/C/BB.value / 15
+	bg_c_a.x = $Column2/BG_C/A/R.value / 15
+	bg_c_a.y = $Column2/BG_C/A/G.value / 15
+	bg_c_a.z = $Column2/BG_C/A/B.value / 15
+	bg_c_b.x = $Column2/BG_C/B/R.value / 15
+	bg_c_b.y = $Column2/BG_C/B/G.value / 15
+	bg_c_b.z = $Column2/BG_C/B/B.value / 15
 	bg_t = $Column2/BG_C/T.value
 
 	view.render_complete = false
