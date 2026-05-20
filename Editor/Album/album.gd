@@ -129,7 +129,10 @@ func do_save (fn: String) -> void:
 	json_file.close()
 
 	var fn_no_ext := fn.substr(0, fn.length() - FN_EXT.length())
-	album.image.save_png(fn_no_ext + ".png")
+	var png := Image.new()
+	png.copy_from(album.image)
+	png.convert(Image.FORMAT_RGBA8)
+	png.save_png(fn_no_ext + ".png")
 
 	current_fn = fn
 	has_unsaved_changes = false
