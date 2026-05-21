@@ -5,6 +5,13 @@ A 4D fractal explorer run by the Godot Engine.
 
 The album tab can be used to capture POIs and/or for sprites in 2D games.
 
+From the album tab, more sophisticated imagery can be generated:
+* Poster: A bigger version of the album item.
+* Portrait: A 3D view image.
+* Movie: A series of Portraits.
+
+![demo00_gif](doc/demo00.gif)
+
 
 Modes and Dimensions
 =====
