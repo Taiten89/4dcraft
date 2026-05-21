@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://1voohh0rkiq4" path="res://Editor/Album/poster.gd" id="13_xkd0q"]
 [ext_resource type="Script" uid="uid://bnncq0owrbyb4" path="res://Editor/Album/portrait.gd" id="14_adket"]
 [ext_resource type="Script" uid="uid://crr5dedmp5ugq" path="res://Editor/Album/view.gd" id="14_xkd0q"]
+[ext_resource type="Script" uid="uid://i2a0ygl13drp" path="res://Editor/Album/movie.gd" id="15_a83es"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8l5dl"]
 shader = ExtResource("1_vl7gr")
@@ -390,6 +391,11 @@ layout_mode = 2
 text = "Portrait"
 script = ExtResource("14_adket")
 
+[node name="Movie" type="Button" parent="Album/Actions" unique_id=504526847]
+layout_mode = 2
+text = "Movie"
+script = ExtResource("15_a83es")
+
 [node name="File_Separator" type="HSeparator" parent="Album/Actions" unique_id=2086468317]
 layout_mode = 2
 
@@ -488,6 +494,7 @@ script = ExtResource("14_xkd0q")
 [connection signal="pressed" from="Album/Actions/Delete" to="Album" method="_on_delete_pressed"]
 [connection signal="pressed" from="Album/Actions/Poster" to="Album/Actions/Poster" method="_on_pressed"]
 [connection signal="pressed" from="Album/Actions/Portrait" to="Album/Actions/Portrait" method="_on_pressed"]
+[connection signal="pressed" from="Album/Actions/Movie" to="Album/Actions/Movie" method="_on_pressed"]
 [connection signal="pressed" from="Album/Actions/New" to="Album" method="_on_new_pressed"]
 [connection signal="pressed" from="Album/Actions/Save" to="Album" method="_on_save_pressed"]
 [connection signal="pressed" from="Album/Actions/Save_As" to="Album" method="_on_save_as_pressed"]
