@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://bnncq0owrbyb4" path="res://Editor/Album/portrait.gd" id="14_adket"]
 [ext_resource type="Script" uid="uid://crr5dedmp5ugq" path="res://Editor/Album/view.gd" id="14_xkd0q"]
 [ext_resource type="Script" uid="uid://i2a0ygl13drp" path="res://Editor/Album/movie.gd" id="15_a83es"]
+[ext_resource type="Script" uid="uid://dtyhutju72uik" path="res://Editor/Info/info.gd" id="17_p646r"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8l5dl"]
 shader = ExtResource("1_vl7gr")
@@ -487,6 +488,27 @@ size_flags_horizontal = 3
 expand_mode = 2
 stretch_mode = 5
 script = ExtResource("14_xkd0q")
+
+[node name="Info" type="TabContainer" parent="." unique_id=1298126465]
+visible = false
+layout_mode = 2
+current_tab = 0
+script = ExtResource("17_p646r")
+metadata/_tab_index = 5
+
+[node name="Readme" type="RichTextLabel" parent="Info" unique_id=223196686]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Controls" type="RichTextLabel" parent="Info" unique_id=663215272]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="License" type="RichTextLabel" parent="Info" unique_id=59823475]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
 
 [connection signal="tab_selected" from="." to="." method="_on_tab_selected"]
 [connection signal="visibility_changed" from="View_Settings" to="View_Settings" method="_on_visibility_changed"]

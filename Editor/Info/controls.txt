@@ -1,0 +1,27 @@
+Apart from the mouse, the keyboard can be used:
+
+
+(slowed with Shift):
+
+Right, Left, Fore, Back:
+  F S E D
+Up, Down, Time+, Time-:
+  R W T G
+Zoom:
+  + -
+
+Rotate (modifies 2 axes each):
+  (RF)	Left Right
+  (RU)	PageUp PageDown
+  (RT)	U J
+  (FU)	Up Down
+  (FT)	I K
+  (UT)	O L
+
+
+(inversed with Shift):
+
+Increase Maximum Number of Iterations:
+  N
+Increase Number Precision:
+  P
