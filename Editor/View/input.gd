@@ -47,7 +47,9 @@ func process_zoom_keys (clamped_delta: float) -> void:
 		do_process_zoom_key(-clamped_delta)
 
 
-func do_process_zoom_key (amount: float) -> void:
+func do_process_zoom_key (signed_clamped_delta: float) -> void:
+	var mod :=  0.25 if Input.is_action_pressed("shift")  else 1.0
+	var amount := mod * signed_clamped_delta
 	var is_around_viewer := view.view_settings.orientation.selected == \
 		View_Settings.ORIENTATION_VIEWER
 	if is_around_viewer:
@@ -61,13 +63,16 @@ func do_process_zoom_key (amount: float) -> void:
 
 
 func process_translation_keys (clamped_delta: float) -> void:
+	var mod :=  0.25 if Input.is_action_pressed("shift")  else 1.0
+	var amount := mod * clamped_delta
+
 	for axis in range(4):
 		var column := editor.slice.base.column(axis)
 		if Input.is_action_pressed("translate" + str(axis) + "+"):
-			editor.slice.position.translate_inplace(clamped_delta * column)
+			editor.slice.position.translate_inplace(amount * column)
 			editor.slice_changed = true
 		if Input.is_action_pressed("translate" + str(axis) + "-"):
-			editor.slice.position.translate_inplace(-clamped_delta * column)
+			editor.slice.position.translate_inplace(-amount * column)
 			editor.slice_changed = true
 
 
@@ -81,6 +86,8 @@ func process_drag () -> void:
 
 
 func process_rotations (clamped_delta: float) -> void:
+	var mod :=  0.25 if Input.is_action_pressed("shift")  else 1.0
+	var amount := mod * clamped_delta
 
 	for i0 in range(3):
 		for i1 in range(i0+1, 4):
@@ -89,7 +96,7 @@ func process_rotations (clamped_delta: float) -> void:
 				var signum_str :=  "+" if signum == +1  else "-"
 				var key := "rotate" + str(i0) + str(i1) + signum_str
 				if Input.is_action_pressed(key):
-					do_rotate(i0, i1, signum * clamped_delta)
+					do_rotate(i0, i1, signum * amount)
 
 
 func do_rotate (i0: int, i1: int, amount: float) -> void:
