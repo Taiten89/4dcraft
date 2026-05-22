@@ -1,6 +1,9 @@
 class_name View_Settings
 extends HBoxContainer
 
+const ORIENTATION_VIEWER := 0
+const ORIENTATION_CENTER := 1
+
 var view: View
 var subsampling: SpinBox
 var workgroup_w: SpinBox
@@ -8,6 +11,7 @@ var workgroup_h: SpinBox
 var portrait: CheckBox
 var portrait_toggled := false
 var portrait_n: SpinBox
+var orientation: OptionButton
 var bg_c_a: Vector3
 var bg_c_b: Vector3
 var bg_t: float
@@ -20,6 +24,7 @@ func _ready () -> void:
 	workgroup_h = find_child("Workgroup_H")
 	portrait = find_child("Portrait")
 	portrait_n = find_child("Portrait_N")
+	orientation = find_child("Orientation")
 	push_to_view()
 
 

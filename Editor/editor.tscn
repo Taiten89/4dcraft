@@ -113,9 +113,21 @@ min_value = 1.0
 value = 1.0
 editable = false
 
-[node name="Column1" type="GridContainer" parent="View_Settings" unique_id=620065115]
+[node name="Column1" type="VBoxContainer" parent="View_Settings" unique_id=270826071]
 layout_mode = 2
-columns = 2
+
+[node name="Orientation_Label" type="Label" parent="View_Settings/Column1" unique_id=123657842]
+layout_mode = 2
+text = "Rotate, Zoom around:"
+
+[node name="Orientation" type="OptionButton" parent="View_Settings/Column1" unique_id=1594231602]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Viewer"
+popup/item_0/id = 0
+popup/item_1/text = "Center"
+popup/item_1/id = 1
 
 [node name="Column2" type="VBoxContainer" parent="View_Settings" unique_id=685614857]
 layout_mode = 2

@@ -48,9 +48,15 @@ func process_zoom_keys (clamped_delta: float) -> void:
 
 
 func do_process_zoom_key (amount: float) -> void:
-	editor.slice.position.translate_inplace(-editor.slice.base.column(1))
+	var is_around_viewer := view.view_settings.orientation.selected == \
+		View_Settings.ORIENTATION_VIEWER
+	if is_around_viewer:
+		editor.slice.position.translate_inplace(-editor.slice.base.column(1))
+
 	editor.slice.zoom(0, 0, amount)
-	editor.slice.position.translate_inplace(editor.slice.base.column(1))
+
+	if is_around_viewer:
+		editor.slice.position.translate_inplace(editor.slice.base.column(1))
 	editor.slice_changed = true
 
 
@@ -87,11 +93,18 @@ func process_rotations (clamped_delta: float) -> void:
 
 
 func do_rotate (i0: int, i1: int, amount: float) -> void:
+	var is_around_viewer := view.view_settings.orientation.selected == \
+		View_Settings.ORIENTATION_VIEWER
 	var position := editor.slice.position
 	var base := editor.slice.base
-	position.translate_inplace(-base.column(1))
+	if is_around_viewer:
+		position.translate_inplace(-base.column(1))
+
 	base.rotate_inplace(i0, i1, amount)
-	position.translate_inplace(base.column(1))
+
+	if is_around_viewer:
+		position.translate_inplace(base.column(1))
+
 	editor.slice_changed = true
 
 
