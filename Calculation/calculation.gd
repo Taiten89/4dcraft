@@ -21,6 +21,8 @@ class Params:
 
 	var w: int
 	var h: int
+	var d := 1
+	var render_z_pl := Vector4()
 	var subsampling := 1
 	var subsampling_step := 0
 	var workgroup_w: int
@@ -31,12 +33,14 @@ class Params:
 		own_bytes += PackedInt32Array([subsampling_step,0,0,0]).to_byte_array()
 
 		var aspect_ratio := float(w) / float(h)
-		return own_bytes + slice.bytes_for_uniforms(aspect_ratio)
+		return own_bytes + slice.bytes_for_uniforms(aspect_ratio, render_z_pl)
 
 	func copy () -> Params:
 		var params := Params.new()
 		params.w = w
 		params.h = h
+		params.d = d
+		params.render_z_pl = Vector4(render_z_pl)
 		params.subsampling = subsampling
 		params.subsampling_step = subsampling_step
 		params.workgroup_w = workgroup_w
@@ -97,11 +101,15 @@ func calculate_func (new_slice: Slice, new_params: Params) -> void:
 	var compute_list := rd.compute_list_begin()
 	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
 	rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
-	rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
+	rd.compute_list_dispatch(compute_list, x_groups, y_groups, params.d)
 	rd.compute_list_end()
 
 	rd.free_rid(uniform_struct.get_ids()[0])
 	uniform_set = RID()
+
+
+func retrieve_result () -> PackedFloat32Array:
+	return result_texture_rd.get_image().get_data().to_float32_array()
 
 
 func recompile_if_needed (new_slice: Slice, new_params: Params) -> void:
@@ -110,7 +118,7 @@ func recompile_if_needed (new_slice: Slice, new_params: Params) -> void:
 	var b := new_slice.mode == "custom" and custom_code_changed
 	var c := new_slice.position.precision != precision
 	var d := P or \
-		[new_params.w,new_params.h] != [params.w,params.h]
+		[new_params.w,new_params.h,new_params.d] != [params.w,params.h,params.d]
 	var e := P or \
 		new_params.subsampling != params.subsampling
 	var f := P or \
@@ -203,7 +211,7 @@ func make_texture_format () -> RDTextureFormat:
 	var tf := RDTextureFormat.new()
 	tf.format = RenderingDevice.DATA_FORMAT_R32_SFLOAT
 	tf.texture_type = RenderingDevice.TEXTURE_TYPE_2D
-	tf.width = params.w
+	tf.width = params.d * params.w
 	tf.height = params.h
 	tf.depth = 1
 	tf.array_layers = 1
@@ -211,5 +219,5 @@ func make_texture_format () -> RDTextureFormat:
 	tf.usage_bits = \
 		(RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT |
 		 RenderingDevice.TEXTURE_USAGE_STORAGE_BIT |
-		 RenderingDevice.TEXTURE_USAGE_CAN_COPY_TO_BIT)
+		 RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT)
 	return tf

@@ -3,6 +3,8 @@
 
 A 4D fractal explorer run by the Godot Engine.
 
+![demo00_gif](doc/demo00.gif)
+
 The album tab can be used to capture POIs and/or for sprites in 2D games.
 
 From the album tab, more sophisticated imagery can be generated:
@@ -10,7 +12,9 @@ From the album tab, more sophisticated imagery can be generated:
 * Portrait: A 3D view image.
 * Movie: A series of Portraits.
 
-![demo00_gif](doc/demo00.gif)
+A "find time" functionality can be found in the Slice tab.
+It looks for the optimal orientation of the time axis, in the current region
+(=position and zoom).
 
 
 Modes and Dimensions

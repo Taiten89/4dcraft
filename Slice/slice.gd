@@ -23,11 +23,14 @@ func copy () -> Slice:
 	return slice
 
 
-func bytes_for_uniforms (aspect_ratio: float) -> PackedByteArray:
+func bytes_for_uniforms
+(aspect_ratio: float, render_z_pl := Vector4()) \
+-> PackedByteArray:
 	var render_xy := render_xy_for_aspect_ratio(aspect_ratio)
 	return \
 		vec4_bytes(render_xy[0]) + \
 		vec4_bytes(render_xy[1]) + \
+		vec4_bytes(render_z_pl) + \
 		position.bytes_for_uniforms() + \
 		PackedInt32Array([max_n]).to_byte_array()
 

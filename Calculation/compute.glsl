@@ -36,8 +36,9 @@ void main ()
 {
     const uint
         X_ = gl_GlobalInvocationID.x,
-        Y_ = gl_GlobalInvocationID.y;
-    const int X=int(X_), Y=int(Y_);
+        Y_ = gl_GlobalInvocationID.y,
+        Z_ = gl_GlobalInvocationID.z;
+    const int X=int(X_), Y=int(Y_), Z=int(Z_);
 
     if(X >= W || Y >= H)
         return;
@@ -47,7 +48,8 @@ void main ()
     if (Y % SUBSAMPLING != subsampling_step / SUBSAMPLING)
         return;
 
-    make_position(X, Y);
+    make_position(X, Y, Z);
     int n = compute();
-    imageStore(data, ivec2(X,Y), vec4(n));
+    ivec2 img_pos = ivec2(X + Z*W, Y);
+    imageStore(data, img_pos, vec4(n));
 }

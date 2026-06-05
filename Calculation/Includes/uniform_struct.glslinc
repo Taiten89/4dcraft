@@ -3,6 +3,7 @@ layout(set = 0, binding = 0, std430) restrict readonly buffer Uniform_Struct
     int subsampling_step;
     vec4 render_x;
     vec4 render_y;
+    vec4 render_z_pl;  // per layer
     NUMBER_T position[4];
     int max_n;
 }
@@ -13,3 +14,4 @@ uniform_struct;
 #define mid_position (uniform_struct.position)
 #define render_x (uniform_struct.render_x)
 #define render_y (uniform_struct.render_y)
+#define render_z_pl (uniform_struct.render_z_pl)

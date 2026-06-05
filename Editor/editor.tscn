@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://d2x03pliyg0ec" path="res://Editor/Slice/base.gd" id="7_motgv"]
 [ext_resource type="Script" uid="uid://bcl6mmrhthmfh" path="res://Editor/Slice/palette_edit.gd" id="9_765lj"]
 [ext_resource type="Shader" uid="uid://bm0u385ota7ym" path="res://Editor/Slice/palette.gdshader" id="9_motgv"]
+[ext_resource type="Script" uid="uid://dclfsahr2eqrt" path="res://Editor/Slice/ftime.gd" id="9_xht12"]
+[ext_resource type="Script" uid="uid://2gvaqnmfstox" path="res://Editor/Slice/aberration.gd" id="10_667eq"]
 [ext_resource type="Script" uid="uid://b4efyvjw2tmbv" path="res://Editor/custom_code.gd" id="12_8l5dl"]
 [ext_resource type="Script" uid="uid://c5y2gawu7i12a" path="res://Editor/Album/album.gd" id="13_ry4s0"]
 [ext_resource type="Script" uid="uid://1voohh0rkiq4" path="res://Editor/Album/poster.gd" id="13_xkd0q"]
@@ -320,6 +322,21 @@ text = "Turn by 45°"
 [node name="Axes" type="OptionButton" parent="Slice/Details/Base/R" unique_id=1345436266]
 layout_mode = 2
 
+[node name="FTime_Separator" type="HSeparator" parent="Slice/Details/Base/R" unique_id=927983533]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="FTime" type="Button" parent="Slice/Details/Base/R" unique_id=18799706]
+layout_mode = 2
+text = "Find Time Axis"
+script = ExtResource("9_xht12")
+
+[node name="Aberration" type="Button" parent="Slice/Details/Base/R" unique_id=1574186919]
+layout_mode = 2
+text = "Estimate
+Aberration"
+script = ExtResource("10_667eq")
+
 [node name="Palette" type="HBoxContainer" parent="Slice" unique_id=1851196051]
 layout_mode = 2
 size_flags_vertical = 3
@@ -520,6 +537,8 @@ metadata/_tab_index = 2
 [connection signal="pressed" from="Slice/Details/Base/R/Reset" to="Slice/Details/Base" method="_on_reset_pressed"]
 [connection signal="pressed" from="Slice/Details/Base/R/Mirror" to="Slice/Details/Base" method="_on_mirror_pressed"]
 [connection signal="pressed" from="Slice/Details/Base/R/Turn" to="Slice/Details/Base" method="_on_turn_pressed"]
+[connection signal="pressed" from="Slice/Details/Base/R/FTime" to="Slice/Details/Base/R/FTime" method="_on_pressed"]
+[connection signal="pressed" from="Slice/Details/Base/R/Aberration" to="Slice/Details/Base/R/Aberration" method="_on_pressed"]
 [connection signal="gui_input" from="Slice/Palette/Gradient" to="Slice/Palette" method="_on_gradient_gui_input"]
 [connection signal="pressed" from="Slice/Palette/Input_Box/Item_Box/Add_Input" to="Slice/Palette" method="_on_add_pressed"]
 [connection signal="pressed" from="Slice/Palette/Input_Box/Item_Box/Remove_Input" to="Slice/Palette" method="_on_remove_pressed"]

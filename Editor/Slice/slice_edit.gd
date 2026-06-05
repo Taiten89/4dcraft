@@ -1,3 +1,4 @@
+class_name Slice_Edit
 extends VBoxContainer
 
 var main: Editor
