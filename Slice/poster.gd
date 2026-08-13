@@ -22,7 +22,9 @@ var cxi := 0
 var cyi := 0
 
 
-func _init (new_slice: Slice, w: int, h: int) -> void:
+func _init (new_slice: Slice, info: Render_Info.Poster_Info) -> void:
+	var w = info.w
+	var h = info.h
 	slice = new_slice.copy()
 	rw = AA_W * w
 	rh = AA_W * h

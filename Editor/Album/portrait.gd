@@ -86,14 +86,12 @@ func do_start_portrait (new_fn: String) -> void:
 	portrait = Portrait.new(mid, int(n.value))
 	fn = new_fn
 	paint = Portrait_Paint.new(Calculation.new())
-	var params := Calculation.Params.new()
-	params.w = int(w.value)
-	params.h = int(h.value)
-	params.workgroup_w = 16
-	params.workgroup_h = 16
+	var info := Render_Info.Portrait_Info.new()
+	info.w = int(w.value)
+	info.h = int(h.value)
 	i = 0
 
-	paint.start(portrait, params)
+	paint.start(portrait, info)
 
 	progress_diag = Popup.new()
 	var hbox := HBoxContainer.new()

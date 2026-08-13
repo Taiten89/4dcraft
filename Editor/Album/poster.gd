@@ -44,7 +44,10 @@ func poster_confirmed_func () -> void:
 
 
 func do_make_poster (fn: String) -> void:
-	var poster := Poster.new(slice, int(w.value), int(h.value))
+	var info := Render_Info.Poster_Info.new()
+	info.w = int(w.value)
+	info.h = int(h.value)
+	var poster := Poster.new(slice, info)
 	for s in range(poster.n_steps()):
 		poster.step()
 	poster.output(fn)

@@ -13,15 +13,23 @@ func _init (calculation: Calculation) -> void:
 
 
 func paint (new_portrait: Portrait, new_params: Calculation.Params) -> void:
-	start(new_portrait, new_params)
+	params = new_params
+	_reset(new_portrait)
 	for s in range(n_steps()):
 		step()
 
-
-func start (new_portrait: Portrait, new_params: Calculation.Params) -> void:
+func _reset (new_portrait: Portrait) -> void:
 	i = 0
 	portrait = new_portrait
-	params = new_params
+
+
+func start (new_portrait: Portrait, info: Render_Info.Portrait_Info) -> void:
+	params = Calculation.Params.new()
+	params.w = info.w
+	params.h = info.h
+	params.workgroup_w = 16
+	params.workgroup_h = 16
+	_reset(new_portrait)
 
 
 func n_steps () -> int:

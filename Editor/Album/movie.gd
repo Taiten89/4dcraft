@@ -3,6 +3,7 @@ extends Button
 @onready var album_edit: Album_Edit = $"../.."
 
 var mid: Slice
+var info: Render_Info.Movie_Info
 var output := ""
 var paint := Portrait_Paint.new(Calculation.new())
 var b_time: SpinBox
@@ -24,7 +25,7 @@ func _process (_delta: float) -> void:
 
 func process_movie () -> void:
 	var p_start := Time.get_ticks_msec()
-	for s_ in range(p_i, n.value):
+	for s_ in range(p_i, info.images):
 		if l_i == 0:
 			start_portrait()
 		for s in range(l_i, paint.n_steps()):
@@ -44,9 +45,9 @@ func process_step () -> void:
 		l_i = 0
 		p_i += 1
 
-	var n_steps := n.value * paint_n_steps
+	var n_steps := info.images * paint_n_steps
 	var step_i := l_i + p_i * paint_n_steps
-	progress_bar.value = step_i / n_steps * 100
+	progress_bar.value = float(step_i) / float(n_steps) * 100
 
 
 func complete_image () -> void:
@@ -59,17 +60,12 @@ func complete_image () -> void:
 
 func start_portrait () -> void:
 	var p_mid := mid.copy()
-	var time := b_time.value + p_i / n.value * (e_time.value - b_time.value)
+	var full_time_span := e_time.value - b_time.value
+	var rel_time := float(p_i) / float(info.images)
+	var time := b_time.value + rel_time * full_time_span
 	p_mid.position.translate_inplace(time * p_mid.base.column(3))
-	var portrait := Portrait.new(p_mid, int(d.value))
-
-	var params := Calculation.Params.new()
-	params.w = int(w.value)
-	params.h = int(h.value)
-	params.workgroup_w = 16
-	params.workgroup_h = 16
-
-	paint.start(portrait, params)
+	var portrait := Portrait.new(p_mid, info.layers)
+	paint.start(portrait, info)
 
 
 func _on_pressed () -> void:
@@ -152,6 +148,11 @@ func movie_confirmed_func () -> void:
 
 
 func start_movie_func (new_output: String) -> void:
+	info = Render_Info.Movie_Info.new()
+	info.w = int(w.value)
+	info.h = int(h.value)
+	info.layers = int(d.value)
+	info.images = int(n.value)
 	output = new_output
 	l_i = 0
 	p_i = 0
