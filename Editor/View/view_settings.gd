@@ -8,9 +8,6 @@ var view: View
 var subsampling: SpinBox
 var workgroup_w: SpinBox
 var workgroup_h: SpinBox
-var portrait: CheckBox
-var portrait_toggled := false
-var portrait_n: SpinBox
 var orientation: OptionButton
 var bg_c_a: Vector3
 var bg_c_b: Vector3
@@ -22,8 +19,6 @@ func _ready () -> void:
 	subsampling = find_child("Subsampling")
 	workgroup_w = find_child("Workgroup_W")
 	workgroup_h = find_child("Workgroup_H")
-	portrait = find_child("Portrait")
-	portrait_n = find_child("Portrait_N")
 	orientation = find_child("Orientation")
 	push_to_view()
 
@@ -55,8 +50,3 @@ func _on_workgroup_w_changed(value: float) -> void:
 	workgroup_h.max_value = int(256 / value)
 func _on_workgroup_h_changed(value: float) -> void:
 	workgroup_w.max_value = int(256 / value)
-
-
-func _on_portrait_toggled (toggled_on: bool) -> void:
-	portrait_toggled = toggled_on
-	portrait_n.editable = toggled_on

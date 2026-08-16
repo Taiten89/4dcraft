@@ -50,7 +50,7 @@ func process_zoom_keys (clamped_delta: float) -> void:
 func do_process_zoom_key (signed_clamped_delta: float) -> void:
 	var mod :=  0.25 if Input.is_action_pressed("shift")  else 1.0
 	var amount := mod * signed_clamped_delta
-	var is_around_viewer := view.view_settings.orientation.selected == \
+	var is_around_viewer := editor.view_settings.orientation.selected == \
 		View_Settings.ORIENTATION_VIEWER
 	if is_around_viewer:
 		editor.slice.position.translate_inplace(-editor.slice.base.column(1))
@@ -100,7 +100,7 @@ func process_rotations (clamped_delta: float) -> void:
 
 
 func do_rotate (i0: int, i1: int, amount: float) -> void:
-	var is_around_viewer := view.view_settings.orientation.selected == \
+	var is_around_viewer := editor.view_settings.orientation.selected == \
 		View_Settings.ORIENTATION_VIEWER
 	var position := editor.slice.position
 	var base := editor.slice.base

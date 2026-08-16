@@ -36,6 +36,8 @@ func _on_visibility_changed () -> void:
 
 
 func update_from_main () -> void:
+	perspective.select(editor.slice.render.perspective)
+
 	var poster := editor.slice.render.poster
 	poster_w.set_value_no_signal(poster.w)
 	poster_h.set_value_no_signal(poster.h)
@@ -59,6 +61,9 @@ func update_from_main () -> void:
 
 
 func push_to_main () -> void:
+	var selected_perspective := perspective.selected as Render_Info.PERSPECTIVE
+	editor.slice.render.perspective = selected_perspective
+
 	poster_w.apply()
 	poster_h.apply()
 	var poster := editor.slice.render.poster
@@ -94,3 +99,5 @@ func push_to_main () -> void:
 	movie.images = int(movie_images.value)
 	movie.preview_images = int(movie_preview_images.value)
 	movie.fps = movie_fps.value
+
+	editor.slice_changed = true

@@ -5,7 +5,6 @@ var params := Calculation.Params.new()
 var render_complete := false
 
 @onready var editor: Editor = $/root/Editor
-@onready var view_settings: View_Settings = $/root/Editor/View_Settings
 
 @onready var calculation := Calculation.new()
 @onready var bird_paint := Slice_Paint.new(calculation)
@@ -51,13 +50,14 @@ func render_if_needed () -> void:
 
 func do_render () -> void:
 	var result: Texture2DRD
-	if view_settings.portrait_toggled:
-		var portrait_n := int(view_settings.portrait_n.value)
-		var portrait := Portrait.new(editor.slice, portrait_n)
+	var perspective := editor.slice.render.perspective
+	if perspective == Render_Info.PERSPECTIVE.PORTRAIT:
+		var layers := editor.slice.render.portrait.preview_layers
+		var portrait := Portrait.new(editor.slice, layers)
 		portrait_paint.paint(portrait, params)
 		portrait_paint.interpolate()
 		result = portrait_paint.result
-	else:
+	if perspective == Render_Info.PERSPECTIVE.BIRD:
 		bird_paint.paint(editor.slice, params)
 		bird_paint.interpolate()
 		result = bird_paint.result
