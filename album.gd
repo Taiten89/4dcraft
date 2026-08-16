@@ -73,7 +73,6 @@ func set_from_storage_variant (v: Dictionary) -> void:
 
 
 func render (x: int, y: int) -> void:
-	var paint := Slice_Paint.new(Calculation.new())
 	var item := get_item(x, y)
 	var rect := Rect2i(x*ew, y*eh, ew, eh)
 
@@ -81,18 +80,36 @@ func render (x: int, y: int) -> void:
 		image.fill_rect(rect, Color(0,0,0, 0))
 		return
 
+	var paint_image: Image
+	if item.render.perspective == Render_Info.PERSPECTIVE.BIRD:
+		paint_image = _render_bird(item)
+	if item.render.perspective == Render_Info.PERSPECTIVE.PORTRAIT:
+		paint_image = _render_portrait(item)
+	paint_image.resize(ew, eh, Image.INTERPOLATE_BILINEAR)
+
+	var src_rect := Rect2i(0, 0, rect.size.x, rect.size.y)
+	image.blit_rect(paint_image, src_rect, rect.position)
+
+func _render_bird (item: Slice) -> Image:
+	var paint := Slice_Paint.new(Calculation.new())
 	var params := Calculation.Params.new()
 	params.w = ew * aa_factor
 	params.h = eh * aa_factor
 	params.workgroup_w = 16
 	params.workgroup_h = 16
 	paint.paint(item, params)
+	return paint.result.get_image()
 
-	var paint_image := paint.result.get_image()
-	paint_image.resize(ew, eh, Image.INTERPOLATE_BILINEAR)
-
-	var src_rect := Rect2i(0, 0, rect.size.x, rect.size.y)
-	image.blit_rect(paint_image, src_rect, rect.position)
+func _render_portrait (item: Slice) -> Image:
+	var paint := Portrait_Paint.new(Calculation.new())
+	var portrait := Portrait.new(item, item.render.portrait.layers)
+	var params := Calculation.Params.new()
+	params.w = ew
+	params.h = eh
+	params.workgroup_w = 6
+	params.workgroup_h = 6
+	paint.paint(portrait, params)
+	return paint.result.get_image()
 
 
 func extend (xy: Vector2i, axis: int, signum: int) -> bool:
