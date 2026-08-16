@@ -10,6 +10,7 @@ var max_n := 50
 var position := Position.new()
 var base := Base.new()
 var palette := Palette.new()
+var render := Render_Info.new()
 
 
 func copy () -> Slice:
@@ -20,6 +21,7 @@ func copy () -> Slice:
 	slice.position = position.copy()
 	slice.base = base.copy()
 	slice.palette = palette.copy()
+	slice.render = render.copy()
 	return slice
 
 
@@ -43,6 +45,7 @@ func variant_for_storage () -> Dictionary[String,Variant]:
 	v['position'] = position.variant_for_storage()
 	v['base'] = base.variant_for_storage()
 	v['palette'] = palette.variant_for_storage()
+	v['render'] = render.variant_for_storage()
 	return v
 
 
@@ -53,6 +56,7 @@ func set_from_storage_variant (v: Dictionary) -> void:
 	position.set_from_storage_variant(v['position'])
 	base.set_from_storage_variant(v['base'])
 	palette.set_from_storage_variant(v['palette'])
+	render.set_from_storage_variant(v['render'])
 
 
 func render_xy_for_aspect_ratio (aspect_ratio: float) -> Array[Vector4]:

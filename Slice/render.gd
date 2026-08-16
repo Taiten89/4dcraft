@@ -8,6 +8,14 @@ var poster := Poster_Info.new()
 var portrait := Portrait_Info.new()
 var movie := Movie_Info.new()
 
+func copy () -> Render_Info:
+	var info := Render_Info.new()
+	info.perspective = perspective
+	info.poster = poster.copy()
+	info.portrait = portrait.copy()
+	info.movie = movie.copy()
+	return info
+
 func variant_for_storage () -> Dictionary[String,Variant]:
 	var v: Dictionary[String,Variant] = {}
 	v['perspective'] = PERSPECTIVE.find_key(perspective)
@@ -28,6 +36,15 @@ class Poster_Info:
 	var w := 1920
 	var h := 1080
 
+	func copy () -> Poster_Info:
+		var info := Poster_Info.new()
+		info.set_from_poster(self)
+		return info
+
+	func set_from_poster (info: Poster_Info) -> void:
+		w = info.w
+		h = info.h
+
 	func variant_for_storage () -> Dictionary[String,Variant]:
 		var v: Dictionary[String,Variant] = {}
 		v['w'] = w
@@ -43,6 +60,16 @@ class Portrait_Info \
 extends Poster_Info:
 	var layers := 5000
 	var preview_layers := 100
+
+	func copy () -> Portrait_Info:
+		var info := Portrait_Info.new()
+		info.set_from_portrait(self)
+		return info
+
+	func set_from_portrait (info: Portrait_Info) -> void:
+		set_from_poster(info)
+		layers = info.layers
+		preview_layers = info.preview_layers
 
 	func variant_for_storage () -> Dictionary[String,Variant]:
 		var v := super.variant_for_storage()
@@ -63,6 +90,19 @@ extends Portrait_Info:
 	var images := 10_000
 	var preview_images := 1_000
 	var fps := 60.0
+
+	func copy () -> Movie_Info:
+		var info := Movie_Info.new()
+		info.set_from_movie(self)
+		return info
+
+	func set_from_movie (info: Movie_Info) -> void:
+		set_from_portrait(info)
+		start = info.start
+		stop = info.stop
+		images = info.images
+		preview_images = info.preview_images
+		fps = info.fps
 
 	func variant_for_storage () -> Dictionary[String,Variant]:
 		var v := super.variant_for_storage()
