@@ -121,8 +121,6 @@ func gui_input (event: InputEvent) -> void:
 		mode_pressed()
 	if event.is_action_pressed("max_n"):
 		max_n_pressed()
-	if event.is_action_pressed("precision"):
-		precision_pressed()
 
 	if w==0 or h==0:
 		return
@@ -153,19 +151,6 @@ func max_n_pressed () -> void:
 			return
 		editor.slice.max_n = new_max_n
 		editor.slice_changed = true
-
-
-func precision_pressed () -> void:
-	if not Input.is_action_pressed("shift"):
-		if not editor.slice.position.precision >= editor.MAX_PRECISION:
-			editor.slice.position.change_precision \
-				(editor.slice.position.precision + 1)
-			editor.slice_changed = true
-	else:
-		if not editor.slice.position.precision == Position.PRECISION_FLOATS:
-			editor.slice.position.change_precision \
-				(editor.slice.position.precision - 1)
-			editor.slice_changed = true
 
 
 func mouse_button (event: InputEvent) -> void:

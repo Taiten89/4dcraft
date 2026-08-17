@@ -23,5 +23,3 @@ Rotate (modifies 2 axes each):
 
 Increase Maximum Number of Iterations:
   N
-Increase Number Precision:
-  P
