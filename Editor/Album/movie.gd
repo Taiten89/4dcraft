@@ -3,65 +3,25 @@ extends Button
 @onready var album_edit: Album_Edit = $"../.."
 
 var mid: Slice
-var output := ""
-var paint := Portrait_Paint.new(Calculation.new())
-var l_i: int  # current layer
-var p_i: int  # current portrait (output image)
+var exporter: Movie_Exporter
 var progress_diag: Popup
 var progress_bar: ProgressBar
 
 
 func _process (_delta: float) -> void:
-	if output:
+	if exporter:
 		process_movie()
 
 
 func process_movie () -> void:
 	var p_start := Time.get_ticks_msec()
-	var portraits := mid.render.movie.images
-	for s_ in range(p_i, portraits):
-		if l_i == 0:
-			start_portrait()
-		for s in range(l_i, paint.n_steps()):
-			process_step()
-			if Time.get_ticks_msec() - p_start > 50:
-				return
-	output = ""
+	while not exporter.is_finished():
+		exporter.step()
+		if Time.get_ticks_msec() - p_start > 50:
+			progress_bar.value = exporter.progress_percents()
+			return
+	exporter = null
 	progress_diag.hide()
-
-
-func process_step () -> void:
-	var paint_n_steps := paint.n_steps()
-	paint.step()
-	l_i += 1
-	if l_i == paint_n_steps:
-		complete_image()
-		l_i = 0
-		p_i += 1
-
-	var images := mid.render.movie.images
-	var n_steps := images * paint_n_steps
-	var step_i := l_i + p_i * paint_n_steps
-	progress_bar.value = float(step_i) / float(n_steps) * 100
-
-
-func complete_image () -> void:
-	var fn := output + "/%05d.png" % p_i
-	var png := Image.new()
-	png.copy_from(paint.result.get_image())
-	png.convert(Image.FORMAT_RGBA8)
-	png.save_png(fn)
-
-
-func start_portrait () -> void:
-	var p_mid := mid.copy()
-	var info := p_mid.render.movie
-	var full_time_span := info.stop - info.start
-	var rel_time := float(p_i) / float(info.images)
-	var time := info.start + rel_time * full_time_span
-	p_mid.position.translate_inplace(time * p_mid.base.column(3))
-	var portrait := Portrait.new(p_mid, info.layers)
-	paint.start(portrait, info)
 
 
 func _on_pressed () -> void:
@@ -77,10 +37,8 @@ func _on_pressed () -> void:
 	diag.dir_selected.connect(start_movie_func)
 
 
-func start_movie_func (new_output: String) -> void:
-	output = new_output
-	l_i = 0
-	p_i = 0
+func start_movie_func (output: String) -> void:
+	exporter = Movie_Exporter.create(mid, output)
 
 	progress_diag = Popup.new()
 	var hbox := HBoxContainer.new()
@@ -97,5 +55,5 @@ func start_movie_func (new_output: String) -> void:
 
 
 func cancel_func () -> void:
-	output = ""
+	exporter = null
 	progress_diag.hide()
