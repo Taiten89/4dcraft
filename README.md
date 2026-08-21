@@ -3,7 +3,7 @@
 
 A 4D fractal explorer run by the Godot Engine.
 
-![demo00_gif](doc/demo00.gif)
+![demo00_gif](doc/example.gif)
 
 The album tab can be used to capture POIs and/or for sprites in 2D games.
 
