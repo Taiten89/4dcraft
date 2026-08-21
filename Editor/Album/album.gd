@@ -123,7 +123,9 @@ func do_save (fn: String) -> void:
 		print('"',fn,'" doesn\'t end with ', FN_EXT ,'; aborting.')
 		return
 
-	var album_as_json := JSON.stringify(album.variant_for_storage())
+	var json_data := album.variant_for_storage()
+	var json_indent := '\t'
+	var album_as_json := JSON.stringify(json_data, json_indent)
 	var json_file = FileAccess.open(fn, FileAccess.WRITE)
 	json_file.store_string(album_as_json)
 	json_file.close()
