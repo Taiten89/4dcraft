@@ -14,6 +14,12 @@ var has_unsaved_changes := false
 @onready var view: TextureRect = $View/View
 
 
+func _ready () -> void:
+	var cli_args := OS.get_cmdline_user_args()
+	if cli_args.size()==1 and cli_args[0].ends_with(FN_EXT):
+		do_open(cli_args[0])
+
+
 func _process (_delta: float) -> void:
 	if not album_changed:
 		return
