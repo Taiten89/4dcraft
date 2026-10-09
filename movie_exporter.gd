@@ -14,10 +14,17 @@ static func create (new_mid: Slice, new_output: String) -> Movie_Exporter:
 	exporter.output = new_output
 	exporter.mid = new_mid.copy()
 	exporter.init()
+	exporter.write_info()
 	return exporter
 
 func output_fn () -> String:
 	return output + "/%05d.png" % image_i
+
+func write_info () -> void:
+	var fps := str(mid.render.movie.fps)
+	var fps_fn := output + "/00000_fps.txt"
+	var fps_file = FileAccess.open(fps_fn, FileAccess.WRITE)
+	fps_file.store_string(fps)
 
 func modified_slice () -> Slice:
 	var mod := mid.copy()
