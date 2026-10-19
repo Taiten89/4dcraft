@@ -18,6 +18,7 @@ extends HBoxContainer
 @onready var movie_preview_layers: SpinBox = $Movie.find_child("Preview_Layers")
 @onready var movie_start: SpinBox = $Movie.find_child("Start")
 @onready var movie_stop: SpinBox = $Movie.find_child("Stop")
+@onready var movie_is_cc: CheckBox = $Movie.find_child("Is_CC")
 @onready var movie_images: SpinBox = $Movie.find_child("Images")
 @onready var movie_preview_images: SpinBox = $Movie.find_child("Preview_Images")
 @onready var movie_fps: SpinBox = $Movie.find_child("FPS")
@@ -55,6 +56,7 @@ func update_from_main () -> void:
 	movie_preview_layers.set_value_no_signal(movie.preview_layers)
 	movie_start.set_value_no_signal(movie.start)
 	movie_stop.set_value_no_signal(movie.stop)
+	movie_is_cc.set_pressed_no_signal(movie.is_cc)
 	movie_images.set_value_no_signal(movie.images)
 	movie_preview_images.set_value_no_signal(movie.preview_images)
 	movie_fps.set_value_no_signal(movie.fps)
@@ -96,6 +98,7 @@ func push_to_main () -> void:
 	movie.preview_layers = int(movie_preview_layers.value)
 	movie.start = movie_start.value
 	movie.stop = movie_stop.value
+	movie.is_cc = movie_is_cc.button_pressed
 	movie.images = int(movie_images.value)
 	movie.preview_images = int(movie_preview_images.value)
 	movie.fps = movie_fps.value

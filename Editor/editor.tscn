@@ -532,6 +532,10 @@ min_value = -100.0
 step = 0.01
 page = 1.0
 
+[node name="Is_CC" type="CheckBox" parent="Render/Movie" unique_id=329170186]
+layout_mode = 2
+text = "correct continuously"
+
 [node name="Images_Label" type="Label" parent="Render/Movie" unique_id=1748010019]
 layout_mode = 2
 text = "Images"

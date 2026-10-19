@@ -87,6 +87,7 @@ class Movie_Info \
 extends Portrait_Info:
 	var start := -1.0
 	var stop := +1.0
+	var is_cc := false
 	var images := 10_000
 	var preview_images := 1_000
 	var fps := 60.0
@@ -100,6 +101,7 @@ extends Portrait_Info:
 		set_from_portrait(info)
 		start = info.start
 		stop = info.stop
+		is_cc = info.is_cc
 		images = info.images
 		preview_images = info.preview_images
 		fps = info.fps
@@ -108,6 +110,7 @@ extends Portrait_Info:
 		var v := super.variant_for_storage()
 		v['start'] = start
 		v['stop'] = stop
+		v['is_cc'] = is_cc
 		v['images'] = images
 		v['preview_images'] = preview_images
 		v['fps'] = fps
@@ -117,6 +120,7 @@ extends Portrait_Info:
 		super.set_from_storage_variant(v)
 		start = v['start']
 		stop = v['stop']
+		is_cc = v['is_cc'] if 'is_cc' in v else false
 		images = v['images']
 		preview_images = v['preview_images']
 		fps = v['fps']
