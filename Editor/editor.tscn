@@ -5,6 +5,7 @@
 [ext_resource type="Shader" uid="uid://c5igyf0qw0i58" path="res://Editor/Preview_Movie/preview_movie.gdshader" id="2_co54o"]
 [ext_resource type="Script" uid="uid://c6ljarsin7nsp" path="res://Editor/View/view.gd" id="2_vl7gr"]
 [ext_resource type="Script" uid="uid://bkunxwsuqmhdr" path="res://Editor/Preview_Movie/preview_movie.gd" id="3_abrme"]
+[ext_resource type="Script" uid="uid://cbolmiodw44do" path="res://Editor/cc.gd" id="4_abrme"]
 [ext_resource type="Script" uid="uid://le11n6wl0hlh" path="res://Editor/Slice/slice_edit.gd" id="5_jdbf7"]
 [ext_resource type="Script" uid="uid://3ssp7ry3pmv4" path="res://Editor/View/input.gd" id="5_motgv"]
 [ext_resource type="Script" uid="uid://mfacjjktifrk" path="res://Editor/Slice/precision_edit.gd" id="6_8ctag"]
@@ -27,6 +28,10 @@
 shader = ExtResource("2_co54o")
 shader_parameter/bg_c = Vector3(0, 0, 0)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_abrme"]
+shader = ExtResource("1_vl7gr")
+shader_parameter/bg_c = Vector3(0, 0, 0)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8l5dl"]
 shader = ExtResource("1_vl7gr")
 shader_parameter/bg_c = Vector3(0, 0, 0)
@@ -46,7 +51,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 1
+current_tab = 2
 tab_focus_mode = 0
 script = ExtResource("1_55rxr")
 
@@ -57,12 +62,44 @@ layout_mode = 2
 script = ExtResource("3_abrme")
 metadata/_tab_index = 0
 
+[node name="CC" type="HBoxContainer" parent="." unique_id=71229206]
+visible = false
+layout_mode = 2
+script = ExtResource("4_abrme")
+metadata/_tab_index = 1
+
+[node name="Actions" type="VBoxContainer" parent="CC" unique_id=939580909]
+layout_mode = 2
+
+[node name="Main_Separator" type="HSeparator" parent="CC/Actions" unique_id=488599397]
+layout_mode = 2
+
+[node name="From_Main" type="Button" parent="CC/Actions" unique_id=1519180431]
+layout_mode = 2
+text = "From Main"
+
+[node name="To_Main" type="Button" parent="CC/Actions" unique_id=920043213]
+layout_mode = 2
+text = "To Main"
+
+[node name="Flow_Separator" type="HSeparator" parent="CC/Actions" unique_id=548470593]
+layout_mode = 2
+
+[node name="Play" type="Button" parent="CC/Actions" unique_id=640017402]
+layout_mode = 2
+text = "Play"
+
+[node name="View" type="ColorRect" parent="CC" unique_id=629077060]
+material = SubResource("ShaderMaterial_abrme")
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="View" type="ColorRect" parent="." unique_id=478086116]
 material = SubResource("ShaderMaterial_8l5dl")
 layout_mode = 2
 focus_mode = 2
 script = ExtResource("2_vl7gr")
-metadata/_tab_index = 1
+metadata/_tab_index = 2
 
 [node name="Input" type="Node" parent="View" unique_id=1656315647]
 script = ExtResource("5_motgv")
@@ -72,7 +109,7 @@ visible = false
 layout_mode = 2
 theme_override_constants/separation = 30
 script = ExtResource("6_765lj")
-metadata/_tab_index = 2
+metadata/_tab_index = 3
 
 [node name="Column0" type="GridContainer" parent="View_Settings" unique_id=655093422]
 layout_mode = 2
@@ -190,7 +227,7 @@ value = 5.0
 visible = false
 layout_mode = 2
 script = ExtResource("5_jdbf7")
-metadata/_tab_index = 3
+metadata/_tab_index = 4
 
 [node name="Details" type="HBoxContainer" parent="Slice" unique_id=1970628518]
 layout_mode = 2
@@ -373,7 +410,7 @@ visible = false
 layout_mode = 2
 theme_override_constants/separation = 30
 script = ExtResource("13_0ikyg")
-metadata/_tab_index = 4
+metadata/_tab_index = 5
 
 [node name="Misc" type="VBoxContainer" parent="Render" unique_id=1367678724]
 layout_mode = 2
@@ -578,13 +615,13 @@ line_length_guidelines = Array[int]([80])
 indent_use_spaces = true
 indent_automatic = true
 script = ExtResource("12_8l5dl")
-metadata/_tab_index = 5
+metadata/_tab_index = 6
 
 [node name="Album" type="HBoxContainer" parent="." unique_id=1372261034]
 visible = false
 layout_mode = 2
 script = ExtResource("13_ry4s0")
-metadata/_tab_index = 6
+metadata/_tab_index = 7
 
 [node name="Actions" type="VBoxContainer" parent="Album" unique_id=614627197]
 layout_mode = 2
@@ -701,7 +738,7 @@ visible = false
 layout_mode = 2
 current_tab = 0
 script = ExtResource("17_p646r")
-metadata/_tab_index = 7
+metadata/_tab_index = 8
 
 [node name="Readme" type="RichTextLabel" parent="Info" unique_id=223196686]
 layout_mode = 2
@@ -719,6 +756,10 @@ metadata/_tab_index = 2
 
 [connection signal="tab_selected" from="." to="." method="_on_tab_selected"]
 [connection signal="visibility_changed" from="Preview_Movie" to="Preview_Movie" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="CC" to="CC" method="_on_visibility_changed"]
+[connection signal="pressed" from="CC/Actions/From_Main" to="CC" method="_on_from_main_pressed"]
+[connection signal="pressed" from="CC/Actions/To_Main" to="CC" method="_on_to_main_pressed"]
+[connection signal="pressed" from="CC/Actions/Play" to="CC" method="_on_play_pressed"]
 [connection signal="visibility_changed" from="View_Settings" to="View_Settings" method="_on_visibility_changed"]
 [connection signal="value_changed" from="View_Settings/Column0/Workgroup/Workgroup_W" to="View_Settings" method="_on_workgroup_w_changed"]
 [connection signal="value_changed" from="View_Settings/Column0/Workgroup/Workgroup_H" to="View_Settings" method="_on_workgroup_h_changed"]
