@@ -5,9 +5,6 @@ var slice: Slice
 var output: String
 var image_i := 0
 
-# factor found by trial and error
-const CC_FINENESS_FOR_60FPS = 11 / log(Find_Time_Common.ANGLE_DIV)
-
 
 static func create (new_slice: Slice, new_output: String) -> Movie_Exporter:
 	var exporter: Movie_Exporter
@@ -47,18 +44,8 @@ func modify_slice_by_image () -> void:
 	var time_translation := time_factor * slice.base.column(3)
 
 	if info.is_cc:
-		correct_continuously()
+		slice.correct_continuously()
 	slice.position.translate_inplace(time_translation)
-
-func correct_continuously () -> void:
-	var rough_bases: Array[Find_Time_Common.Item] = \
-		[Find_Time_Common.Item.new(slice.base)]
-	var fps := slice.render.movie.fps
-	var cc_fineness := log(fps) / log(60) * CC_FINENESS_FOR_60FPS
-	var ftime := Find_Time_Common.new(slice, rough_bases, cc_fineness)
-	for ftime_step_i in range(ftime.n_steps()):
-		ftime.step()
-	slice.base = ftime.result_with_lowest_aberration()
 
 
 class Bird_Movie_Exporter \
