@@ -95,7 +95,20 @@ func zoom (mouse_x: float, mouse_y: float, amount: float) -> void:
 	position.translate_inplace(translation)
 
 
-func correct_continuously () -> void:
+func modify_for_1_image (always_cc := false) -> void:
+	translate_for_1_image()
+	if always_cc or render.movie.is_cc:
+		correct_continuously_for_1_image()
+
+
+func translate_for_1_image () -> void:
+	var full_time_span := render.movie.stop - render.movie.start
+	var time_factor := full_time_span / render.movie.images
+	var time_translation := time_factor * base.column(3)
+	position.translate_inplace(time_translation)
+
+
+func correct_continuously_for_1_image () -> void:
 	var rough_bases: Array[Find_Time_Common.Item] = \
 		[Find_Time_Common.Item.new(base)]
 	var fps := render.movie.fps

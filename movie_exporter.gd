@@ -22,10 +22,6 @@ static func create (new_slice: Slice, new_output: String) -> Movie_Exporter:
 func output_fn () -> String:
 	return output + "/%05d.png" % image_i
 
-func prepare_for_next_image () -> void:
-	modify_slice_by_image()
-	image_i += 1
-
 func write_info () -> void:
 	var fps := str(slice.render.movie.fps)
 	var fps_fn := output + "/00000_fps.txt"
@@ -35,16 +31,6 @@ func write_info () -> void:
 func modify_slice_to_start () -> void:
 	var info := slice.render.movie
 	var time_translation := info.start * slice.base.column(3)
-	slice.position.translate_inplace(time_translation)
-
-func modify_slice_by_image () -> void:
-	var info := slice.render.movie
-	var full_time_span := info.stop - info.start
-	var time_factor := full_time_span / info.images
-	var time_translation := time_factor * slice.base.column(3)
-
-	if info.is_cc:
-		slice.correct_continuously()
 	slice.position.translate_inplace(time_translation)
 
 
@@ -63,7 +49,8 @@ extends Movie_Exporter:
 			poster.step()
 		poster.output(output_fn())
 
-		prepare_for_next_image()
+		slice.modify_for_1_image()
+		image_i += 1
 
 
 class Portrait_Movie_Exporter \
@@ -99,4 +86,5 @@ extends Movie_Exporter:
 		img.convert(Image.FORMAT_RGBA8)
 		img.save_png(output_fn())
 
-		prepare_for_next_image()
+		slice.modify_for_1_image()
+		image_i += 1

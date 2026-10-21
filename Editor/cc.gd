@@ -38,21 +38,13 @@ func _process (delta: float) -> void:
 
 	var timeout_msec := Time.get_ticks_msec() + FTIME_LIMIT_MSEC
 	for frame_i in range(n_frames):
-		cc_and_translate_for_1_frame()
+		const always_cc = true
+		slice.modify_for_1_image(always_cc)
 		if Time.get_ticks_msec() > timeout_msec:
 			break
 
 	if n_frames:
 		paint()
-
-
-func cc_and_translate_for_1_frame () -> void:
-	var info := slice.render.movie
-	var full_time_span := info.stop - info.start
-	var time_factor := full_time_span / info.images
-	var time_translation := time_factor * slice.base.column(3)
-	slice.correct_continuously()
-	slice.position.translate_inplace(time_translation)
 
 
 func paint () -> void:
