@@ -2,7 +2,7 @@ class_name Find_Time
 extends RefCounted
 
 const N_FINE_ITERATIONS := 10
-const Item := Find_Time_Common.Item
+const Item := Find_Time_Item.Item
 
 var result: Base
 var slice: Slice

@@ -1,6 +1,8 @@
 class_name Find_Time_Common
 extends RefCounted
 
+const Item := Find_Time_Item.Item
+
 const RESULT_SIZE := 4
 
 const ANGLE_DIV := 4
@@ -20,13 +22,6 @@ var angle_start: float
 var angle_step: float
 var rough_base_i := 0
 var angle_i: Array[int] = [0,0,0]
-
-
-class Item:
-	var base: Base
-	var aberration := 0
-	func _init (new_base: Base) -> void:
-		base = new_base.copy()
 
 
 func _init
