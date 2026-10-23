@@ -1,5 +1,7 @@
 extends Button
 
+const Params = Find_Time_Params.Params
+
 @onready var editor: Editor = $/root/Editor
 @onready var slice_edit: Slice_Edit = $/root/Editor/Slice
 var diag: Popup
@@ -30,9 +32,10 @@ func calculate_relative_aberration () -> float:
 	var slice := editor.slice
 	var base := slice.base
 	var item := Find_Time_Common.Item.new(base)
-	var ftime := Find_Time_Common.new(slice, [item], 0.0)
+	var params := Params.new()
+	var ftime := Find_Time_Common.new(slice, [item], params)
 	var aberration := ftime.calculate_aberration(editor.slice.base)
-	const RESOLUTION := Find_Time_Common.RESOLUTION
-	const TIME_DIV := Find_Time_Common.TIME_DIV
-	var max_aberration := RESOLUTION**3 * TIME_DIV * slice.max_n
+	var resolution := params.resolution
+	var time_div := params.time_div
+	var max_aberration := resolution**3 * time_div * slice.max_n
 	return float(aberration) / float(max_aberration)

@@ -5,7 +5,7 @@ const AXIS_REPR_SHORT := "RFUT"
 const AXIS_REPR := ["Right", "Fore", "Up", "Time"]
 
 # factor found by trial and error
-const CC_FINENESS_FOR_60FPS = 11 / log(Find_Time_Common.ANGLE_DIV)
+var CC_FINENESS_FOR_60FPS := 11 / log(Find_Time_Params.Params.new().angle_div)
 
 var mode := "default"
 var custom_code := ""
@@ -113,7 +113,9 @@ func correct_continuously_for_1_image () -> void:
 		[Find_Time_Common.Item.new(base)]
 	var fps := render.movie.fps
 	var cc_fineness := log(fps) / log(60) * CC_FINENESS_FOR_60FPS
-	var ftime := Find_Time_Common.new(self, rough_bases, cc_fineness)
+	var params := Find_Time_Params.Params.new()
+	params.fineness = cc_fineness
+	var ftime := Find_Time_Common.new(self, rough_bases, params)
 	for ftime_step_i in range(ftime.n_steps()):
 		ftime.step()
 	base = ftime.result_with_lowest_aberration()
