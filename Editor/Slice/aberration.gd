@@ -1,5 +1,7 @@
 extends Button
 
+const Iteration = Find_Time_Iteration.Iteration
+const Item = Find_Time_Item.Item
 const Params = Find_Time_Params.Params
 
 @onready var editor: Editor = $/root/Editor
@@ -31,9 +33,9 @@ func ok_pressed () -> void:
 func calculate_relative_aberration () -> float:
 	var slice := editor.slice
 	var base := slice.base
-	var item := Find_Time_Common.Item.new(base)
+	var item := Item.new(base)
 	var params := Params.new()
-	var ftime := Find_Time_Common.new(slice, [item], params)
+	var ftime := Iteration.new(slice, [item], params)
 	var aberration := ftime.calculate_aberration(editor.slice.base)
 	var resolution := params.resolution
 	var time_div := params.time_div
