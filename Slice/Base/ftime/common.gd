@@ -25,7 +25,7 @@ func _init
 	slice = new_slice.copy()
 	rough_bases = new_rough_bases
 	angle_start = -TAU / 8 / (params.angle_div**params.fineness)
-	angle_step = TAU / 4 / params.angle_div / (params.angle_div**params.fineness)
+	angle_step = TAU / 4 / (params.angle_div**params.fineness)
 
 
 func n_steps () -> int:
