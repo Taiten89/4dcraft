@@ -87,10 +87,11 @@ class Movie_Info \
 extends Portrait_Info:
 	var start := -1.0
 	var stop := +1.0
-	var is_cc := false
 	var images := 10_000
 	var preview_images := 1_000
 	var fps := 60.0
+	var cc_enabled := false
+	var cc_params := Find_Time_Params.Params.new_for_cc()
 
 	func copy () -> Movie_Info:
 		var info := Movie_Info.new()
@@ -101,26 +102,31 @@ extends Portrait_Info:
 		set_from_portrait(info)
 		start = info.start
 		stop = info.stop
-		is_cc = info.is_cc
 		images = info.images
 		preview_images = info.preview_images
 		fps = info.fps
+		cc_enabled = info.cc_enabled
+		cc_params = info.cc_params.copy()
 
 	func variant_for_storage () -> Dictionary[String,Variant]:
 		var v := super.variant_for_storage()
 		v['start'] = start
 		v['stop'] = stop
-		v['is_cc'] = is_cc
 		v['images'] = images
 		v['preview_images'] = preview_images
 		v['fps'] = fps
+		v['cc_enabled'] = cc_enabled
+		v['cc_params'] = cc_params.variant_for_storage()
 		return v
 
 	func set_from_storage_variant (v: Dictionary) -> void:
 		super.set_from_storage_variant(v)
 		start = v['start']
 		stop = v['stop']
-		is_cc = v['is_cc'] if 'is_cc' in v else false
 		images = v['images']
 		preview_images = v['preview_images']
 		fps = v['fps']
+		cc_enabled = v['cc_enabled'] if 'cc_enabled' in v else false
+		cc_params = Find_Time_Params.Params.new_for_cc()
+		if 'cc_params' in v:
+			cc_params.set_from_storage_variant(v['cc_params'])

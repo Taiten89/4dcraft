@@ -18,10 +18,14 @@ extends HBoxContainer
 @onready var movie_preview_layers: SpinBox = $Movie.find_child("Preview_Layers")
 @onready var movie_start: SpinBox = $Movie.find_child("Start")
 @onready var movie_stop: SpinBox = $Movie.find_child("Stop")
-@onready var movie_is_cc: CheckBox = $Movie.find_child("Is_CC")
 @onready var movie_images: SpinBox = $Movie.find_child("Images")
 @onready var movie_preview_images: SpinBox = $Movie.find_child("Preview_Images")
 @onready var movie_fps: SpinBox = $Movie.find_child("FPS")
+@onready var movie_cc_enabled: CheckBox = $Movie_CC.find_child("Enabled")
+@onready var movie_cc_fineness: SpinBox = $Movie_CC.find_child("Fineness")
+@onready var movie_cc_angle_div: SpinBox = $Movie_CC.find_child("Angle_Div")
+@onready var movie_cc_time_div: SpinBox = $Movie_CC.find_child("Time_Div")
+@onready var movie_cc_resolution: SpinBox = $Movie_CC.find_child("Resolution")
 
 
 func _ready () -> void:
@@ -56,10 +60,14 @@ func update_from_main () -> void:
 	movie_preview_layers.set_value_no_signal(movie.preview_layers)
 	movie_start.set_value_no_signal(movie.start)
 	movie_stop.set_value_no_signal(movie.stop)
-	movie_is_cc.set_pressed_no_signal(movie.is_cc)
 	movie_images.set_value_no_signal(movie.images)
 	movie_preview_images.set_value_no_signal(movie.preview_images)
 	movie_fps.set_value_no_signal(movie.fps)
+	movie_cc_enabled.set_pressed_no_signal(movie.cc_enabled)
+	movie_cc_fineness.set_value_no_signal(movie.cc_params.fineness)
+	movie_cc_angle_div.set_value_no_signal(movie.cc_params.angle_div)
+	movie_cc_time_div.set_value_no_signal(movie.cc_params.time_div)
+	movie_cc_resolution.set_value_no_signal(movie.cc_params.resolution)
 
 
 func push_to_main () -> void:
@@ -91,6 +99,10 @@ func push_to_main () -> void:
 	movie_images.apply()
 	movie_preview_images.apply()
 	movie_fps.apply()
+	movie_cc_fineness.apply()
+	movie_cc_angle_div.apply()
+	movie_cc_time_div.apply()
+	movie_cc_resolution.apply()
 	var movie := editor.slice.render.movie
 	movie.w = int(movie_w.value)
 	movie.h = int(movie_h.value)
@@ -98,9 +110,13 @@ func push_to_main () -> void:
 	movie.preview_layers = int(movie_preview_layers.value)
 	movie.start = movie_start.value
 	movie.stop = movie_stop.value
-	movie.is_cc = movie_is_cc.button_pressed
 	movie.images = int(movie_images.value)
 	movie.preview_images = int(movie_preview_images.value)
 	movie.fps = movie_fps.value
+	movie.cc_enabled = movie_cc_enabled.button_pressed
+	movie.cc_params.fineness = movie_cc_fineness.value
+	movie.cc_params.angle_div = int(movie_cc_angle_div.value)
+	movie.cc_params.time_div = int(movie_cc_time_div.value)
+	movie.cc_params.resolution = int(movie_cc_resolution.value)
 
 	editor.slice_changed = true

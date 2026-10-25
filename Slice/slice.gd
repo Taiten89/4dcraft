@@ -4,9 +4,6 @@ extends RefCounted
 const AXIS_REPR_SHORT := "RFUT"
 const AXIS_REPR := ["Right", "Fore", "Up", "Time"]
 
-# factor found by trial and error
-var CC_FINENESS_FOR_60FPS := 11 / log(Find_Time_Params.Params.new().angle_div)
-
 var mode := "default"
 var custom_code := ""
 var max_n := 50
@@ -97,7 +94,7 @@ func zoom (mouse_x: float, mouse_y: float, amount: float) -> void:
 
 func modify_for_1_image (always_cc := false) -> void:
 	translate_for_1_image()
-	if always_cc or render.movie.is_cc:
+	if always_cc or render.movie.cc_enabled:
 		correct_continuously_for_1_image()
 
 
@@ -110,15 +107,10 @@ func translate_for_1_image () -> void:
 
 func correct_continuously_for_1_image () -> void:
 	const Iteration := Find_Time_Iteration.Iteration
-	const Params = Find_Time_Params.Params
 	const Item = Find_Time_Item.Item
 
 	var rough_bases: Array[Item] = [Item.new(base)]
-	var fps := render.movie.fps
-	var cc_fineness := log(fps) / log(60) * CC_FINENESS_FOR_60FPS
-	var params := Params.new()
-	params.fineness = cc_fineness
-	var ftime := Iteration.new(self, rough_bases, params)
+	var ftime := Iteration.new(self, rough_bases, render.movie.cc_params)
 	for ftime_step_i in range(ftime.n_steps()):
 		ftime.step()
 	base = ftime.result_with_lowest_aberration()

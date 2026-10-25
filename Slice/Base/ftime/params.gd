@@ -11,6 +11,16 @@ extends RefCounted:
 	var resolution := 30
 
 
+	static func new_for_cc () -> Params:
+		var params := Params.new()
+		params.fineness = 10.0
+		params.n_items_kept = 1
+		params.angle_div = 3
+		params.time_div = 10
+		params.resolution = 30
+		return params
+
+
 	func copy () -> Params:
 		var params := Params.new()
 		params.fineness = fineness

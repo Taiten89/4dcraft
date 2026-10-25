@@ -569,10 +569,6 @@ min_value = -100.0
 step = 0.01
 page = 1.0
 
-[node name="Is_CC" type="CheckBox" parent="Render/Movie" unique_id=329170186]
-layout_mode = 2
-text = "correct continuously"
-
 [node name="Images_Label" type="Label" parent="Render/Movie" unique_id=1748010019]
 layout_mode = 2
 text = "Images"
@@ -602,6 +598,60 @@ layout_mode = 2
 min_value = 1.0
 max_value = 200.0
 step = 0.1
+value = 1.0
+
+[node name="Movie_CC" type="VBoxContainer" parent="Render" unique_id=723191087]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Render/Movie_CC" unique_id=608639175]
+layout_mode = 2
+text = "Movie: CC"
+
+[node name="HSeparator" type="HSeparator" parent="Render/Movie_CC" unique_id=1248710077]
+layout_mode = 2
+
+[node name="Enabled" type="CheckBox" parent="Render/Movie_CC" unique_id=329170186]
+layout_mode = 2
+text = "enabled"
+
+[node name="Fineness_Label" type="Label" parent="Render/Movie_CC" unique_id=55657461]
+layout_mode = 2
+text = "Fineness"
+
+[node name="Fineness" type="SpinBox" parent="Render/Movie_CC" unique_id=531802817]
+layout_mode = 2
+min_value = 1.1
+max_value = 50.0
+step = 0.1
+page = 1.0
+value = 1.1
+
+[node name="Angle_Div_Label" type="Label" parent="Render/Movie_CC" unique_id=1770303860]
+layout_mode = 2
+text = "Angle Div"
+
+[node name="Angle_Div" type="SpinBox" parent="Render/Movie_CC" unique_id=1923424846]
+layout_mode = 2
+min_value = 2.0
+max_value = 50.0
+value = 2.0
+
+[node name="Time_Div_Label" type="Label" parent="Render/Movie_CC" unique_id=421886857]
+layout_mode = 2
+text = "Time Div"
+
+[node name="Time_Div" type="SpinBox" parent="Render/Movie_CC" unique_id=1021363737]
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+
+[node name="Resolution_Label" type="Label" parent="Render/Movie_CC" unique_id=753077804]
+layout_mode = 2
+text = "Resolution (3-dim)"
+
+[node name="Resolution" type="SpinBox" parent="Render/Movie_CC" unique_id=1837675862]
+layout_mode = 2
+min_value = 1.0
 value = 1.0
 
 [node name="Custom_Code" type="CodeEdit" parent="." unique_id=1128772097]
