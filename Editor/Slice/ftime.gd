@@ -1,7 +1,7 @@
 extends Button
 
 @onready var editor: Editor = $/root/Editor
-@onready var base_edit: Base_Edit = $/root/Editor/Slice/Details/Base
+@onready var base_edit: Base_Edit = $/root/Editor/Main/Basic/Details/Base
 var ftime: Find_Time
 var i: int
 var progress_diag: Popup

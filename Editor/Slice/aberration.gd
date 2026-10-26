@@ -5,12 +5,12 @@ const Item = Find_Time_Item.Item
 const Params = Find_Time_Params.Params
 
 @onready var editor: Editor = $/root/Editor
-@onready var slice_edit: Slice_Edit = $/root/Editor/Slice
+@onready var basic_edit: Slice_Edit = $/root/Editor/Main/Basic
 var diag: Popup
 
 
 func _on_pressed () -> void:
-	slice_edit.push_to_main()
+	basic_edit.push_to_main()
 
 	diag = Popup.new()
 	$/root.add_child(diag)

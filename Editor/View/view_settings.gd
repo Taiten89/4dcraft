@@ -4,22 +4,25 @@ extends HBoxContainer
 const ORIENTATION_VIEWER := 0
 const ORIENTATION_CENTER := 1
 
-var view: View
-var subsampling: SpinBox
-var workgroup_w: SpinBox
-var workgroup_h: SpinBox
-var orientation: OptionButton
+@onready var view: View = $/root/Editor/Main/View
+@onready var subsampling: SpinBox = find_child("Subsampling")
+@onready var workgroup_w: SpinBox = find_child("Workgroup_W")
+@onready var workgroup_h: SpinBox = find_child("Workgroup_H")
+@onready var orientation: OptionButton = find_child("Orientation")
+@onready var bg_c_ar_sb: SpinBox = $Column2/BG_C/A/R
+@onready var bg_c_ag_sb: SpinBox = $Column2/BG_C/A/G
+@onready var bg_c_ab_sb: SpinBox = $Column2/BG_C/A/B
+@onready var bg_c_br_sb: SpinBox = $Column2/BG_C/B/R
+@onready var bg_c_bg_sb: SpinBox = $Column2/BG_C/B/G
+@onready var bg_c_bb_sb: SpinBox = $Column2/BG_C/B/B
+@onready var bg_t_sb: SpinBox = $Column2/BG_C/T
+
 var bg_c_a: Vector3
 var bg_c_b: Vector3
 var bg_t: float
 
 
 func _ready () -> void:
-	view = $"../View"
-	subsampling = find_child("Subsampling")
-	workgroup_w = find_child("Workgroup_W")
-	workgroup_h = find_child("Workgroup_H")
-	orientation = find_child("Orientation")
 	push_to_view()
 
 
@@ -35,13 +38,18 @@ func push_to_view () -> void:
 	vparams.workgroup_w = int(workgroup_w.value)
 	vparams.workgroup_h = int(workgroup_h.value)
 
-	bg_c_a.x = $Column2/BG_C/A/R.value / 15
-	bg_c_a.y = $Column2/BG_C/A/G.value / 15
-	bg_c_a.z = $Column2/BG_C/A/B.value / 15
-	bg_c_b.x = $Column2/BG_C/B/R.value / 15
-	bg_c_b.y = $Column2/BG_C/B/G.value / 15
-	bg_c_b.z = $Column2/BG_C/B/B.value / 15
-	bg_t = $Column2/BG_C/T.value
+	for sb in [bg_t_sb,
+			bg_c_ar_sb, bg_c_ag_sb, bg_c_ab_sb,
+			bg_c_br_sb, bg_c_bg_sb, bg_c_bb_sb]:
+		sb.apply()
+
+	bg_c_a.x = bg_c_ar_sb.value / 15
+	bg_c_a.y = bg_c_ag_sb.value / 15
+	bg_c_a.z = bg_c_ab_sb.value / 15
+	bg_c_b.x = bg_c_br_sb.value / 15
+	bg_c_b.y = bg_c_bg_sb.value / 15
+	bg_c_b.z = bg_c_bb_sb.value / 15
+	bg_t = bg_t_sb.value
 
 	view.render_complete = false
 
