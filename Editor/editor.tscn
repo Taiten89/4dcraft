@@ -474,7 +474,7 @@ layout_mode = 2
 
 [node name="Enabled" type="CheckBox" parent="Main/Render/Movie_CC" unique_id=329170186]
 layout_mode = 2
-text = "enabled"
+text = "correct continuously"
 
 [node name="Fineness_Label" type="Label" parent="Main/Render/Movie_CC" unique_id=55657461]
 layout_mode = 2
