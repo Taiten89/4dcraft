@@ -32,6 +32,8 @@ func modify_slice_to_start () -> void:
 	var info := slice.render.movie
 	var time_translation := info.start * slice.base.column(3)
 	slice.position.translate_inplace(time_translation)
+	if info.cc_enabled:
+		slice.begin_cc()
 
 
 class Bird_Movie_Exporter \

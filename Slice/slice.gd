@@ -12,6 +12,8 @@ var base := Base.new()
 var palette := Palette.new()
 var render := Render_Info.new()
 
+var cc_mass0 := INT64_MAX
+
 
 func copy () -> Slice:
 	var slice := Slice.new()
@@ -106,11 +108,24 @@ func translate_for_1_image () -> void:
 
 
 func correct_continuously_for_1_image () -> void:
-	const Iteration := Find_Time_Iteration.Iteration
+	const Iteration_For_CC := Find_Time_Iteration_For_CC.Iteration_For_CC
 	const Item = Find_Time_Item.Item
 
 	var rough_bases: Array[Item] = [Item.new(base)]
-	var ftime := Iteration.new(self, rough_bases, render.movie.cc_params)
+	var ftime := Iteration_For_CC.new(self, rough_bases, render.movie.cc_params)
+
+	ftime.mass0 = cc_mass0
 	for ftime_step_i in range(ftime.n_steps()):
 		ftime.step()
 	base = ftime.result_with_lowest_aberration()
+
+
+func begin_cc () -> void:
+	const Iteration_For_CC := Find_Time_Iteration_For_CC.Iteration_For_CC
+	const Item = Find_Time_Item.Item
+
+	var rough_bases: Array[Item] = [Item.new(base)]
+	var ftime := Iteration_For_CC.new(self, rough_bases, render.movie.cc_params)
+
+	const time_i := 0
+	cc_mass0 = ftime.calculate_mass(base, time_i)

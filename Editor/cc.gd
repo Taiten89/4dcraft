@@ -79,6 +79,7 @@ func update_play_button_text () -> void:
 
 func _on_from_main_pressed () -> void:
 	slice = editor.slice.copy()
+	slice.begin_cc()
 	if not playing:
 		paint()
 
