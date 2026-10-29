@@ -85,13 +85,16 @@ extends Poster_Info:
 
 class Movie_Info \
 extends Portrait_Info:
-	var start := -1.0
+	var start := 0.0
 	var stop := +1.0
 	var images := 10_000
 	var preview_images := 1_000
 	var fps := 60.0
 	var cc_enabled := false
 	var cc_params := Find_Time_Params.Params.new_for_cc()
+
+	func _init () -> void:
+		preview_layers = 200
 
 	func copy () -> Movie_Info:
 		var info := Movie_Info.new()
