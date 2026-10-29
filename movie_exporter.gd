@@ -35,6 +35,35 @@ func modify_slice_to_start () -> void:
 	if info.cc_enabled:
 		slice.begin_cc()
 
+func after_image_completed () -> void:
+	var info := slice.render.movie
+	slice.modify_for_1_image()
+	image_i += 1
+	if image_i == info.images:
+		after_movie_completed()
+
+func after_movie_completed () -> void:
+	save_end_album()
+
+func save_end_album () -> void:
+	const ALBUM_SIZE := 256
+	var fn := output + '/00000_end_album' + Album.FN_EXT
+	var info := slice.render.movie
+	var w_h := float(info.w) / float(info.h)
+	var ew: int
+	var eh: int
+	if w_h > 1.0:
+		ew = int(w_h * ALBUM_SIZE)
+		eh = ALBUM_SIZE
+	else:
+		ew = ALBUM_SIZE
+		eh = int(ALBUM_SIZE / w_h)
+
+	var album := Album.new(1, 1, ew, eh)
+	album.set_item(0, 0, slice)
+	album.render(0, 0)
+	album.save_as_files(fn)
+
 
 class Bird_Movie_Exporter \
 extends Movie_Exporter:
@@ -51,8 +80,7 @@ extends Movie_Exporter:
 			poster.step()
 		poster.output(output_fn())
 
-		slice.modify_for_1_image()
-		image_i += 1
+		after_image_completed()
 
 
 class Portrait_Movie_Exporter \
@@ -88,5 +116,4 @@ extends Movie_Exporter:
 		img.convert(Image.FORMAT_RGBA8)
 		img.save_png(output_fn())
 
-		slice.modify_for_1_image()
-		image_i += 1
+		after_image_completed()

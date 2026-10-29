@@ -1,6 +1,7 @@
 class_name Album
 extends RefCounted
 
+const FN_EXT := ".json"
 const MAX_EW := 256
 const MAX_EH := 256
 
@@ -39,6 +40,21 @@ func set_item (x: int, y: int, item: Slice) -> void:
 	items[x + y*nx] = null
 	if item != null:
 		items[x + y*nx] = item.copy()
+
+
+func save_as_files (fn: String) -> void:
+	var json_data := variant_for_storage()
+	var json_indent := '\t'
+	var album_as_json := JSON.stringify(json_data, json_indent)
+	var json_file = FileAccess.open(fn, FileAccess.WRITE)
+	json_file.store_string(album_as_json)
+	json_file.close()
+
+	var fn_no_ext := fn.substr(0, fn.length() - FN_EXT.length())
+	var png := Image.new()
+	png.copy_from(image)
+	png.convert(Image.FORMAT_RGBA8)
+	png.save_png(fn_no_ext + ".png")
 
 
 func variant_for_storage () -> Dictionary[String,Variant]:

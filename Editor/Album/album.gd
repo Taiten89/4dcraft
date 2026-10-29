@@ -1,7 +1,7 @@
 class_name Album_Edit
 extends HBoxContainer
 
-const FN_EXT := ".json"
+const FN_EXT := Album.FN_EXT
 
 var album := Album.new()
 var album_changed := true
@@ -129,18 +129,7 @@ func do_save (fn: String) -> void:
 		print('"',fn,'" doesn\'t end with ', FN_EXT ,'; aborting.')
 		return
 
-	var json_data := album.variant_for_storage()
-	var json_indent := '\t'
-	var album_as_json := JSON.stringify(json_data, json_indent)
-	var json_file = FileAccess.open(fn, FileAccess.WRITE)
-	json_file.store_string(album_as_json)
-	json_file.close()
-
-	var fn_no_ext := fn.substr(0, fn.length() - FN_EXT.length())
-	var png := Image.new()
-	png.copy_from(album.image)
-	png.convert(Image.FORMAT_RGBA8)
-	png.save_png(fn_no_ext + ".png")
+	album.save_as_files(fn)
 
 	current_fn = fn
 	has_unsaved_changes = false
